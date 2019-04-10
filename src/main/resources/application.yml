@@ -1,0 +1,59 @@
+server:
+  compression:
+    enabled: true
+    min-response-size: 2048
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  servlet:
+    multipart:
+      max-file-size: 10240000
+      max-request-size: 10240000
+  jpa:
+    properties:
+      hibernate.show_sql: true
+      hibernate.format_sql: true
+#  profiles:
+#    active:
+#    - oracle
+#    - security-off
+security:
+  oauth2:
+    client:
+      client-id: ci
+      client-secret: cs
+      scope:
+      - all
+      access-token-validity-seconds: 36000
+      grant-type: password
+#logging:
+#  path: D:\fnb-ws
+#  level:
+#    org.springframework.jdbc.core: trace
+#    org.springframework.jdbc.core.BeanPropertyRowMapper: info
+#    org.hibernate.type: trace
+---
+spring:
+  profiles: ssl
+server:
+  ssl:
+    key-store: classpath:tomcat.keystore
+    key-store-password: epb9209
+    key-password: epb9209
+---
+spring:
+  profiles: postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/epb
+    username: epb
+    password: 9209
+---
+spring:
+  profiles: oracle
+  datasource:
+    url: jdbc:oracle:thin:LSTUDIO/EPB@//192.168.0.17:1521/orcl
+    username: LSTUDIO
+    password: EPB
+    driver-class-name: oracle.jdbc.OracleDriver
+spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.Oracle10gDialect
