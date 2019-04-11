@@ -10,6 +10,8 @@ import java.util.Optional;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,7 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.epb.ah.bean.Home;
 import com.epb.ah.bean.EccustLoginPayload;
+import com.epb.ah.bean.EccustSignupPayload;
+import com.epb.ah.entity.Customer;
+import com.epb.ah.repository.CustomerRepository;
 import com.epb.ah.service.ProcedureResponse;
+import com.epb.ah.service.ProcedureResponseWithCustId;
 import com.epb.ah.service.ProcedureService;
 
 @RestController
@@ -48,6 +54,41 @@ public class ShellController {
 						.eccustLogin("en", orgId, name, password, ecshopId, guestRecKey));
 	}
 
+	@PostMapping("/register")
+	public ResponseEntity<List<Customer>> register(
+			@RequestBody final EccustSignupPayload payload) {
+
+		final ProcedureResponseWithCustId response = this.procedureService
+				.eccustSignup(
+						"",
+						payload.getOrgId(),
+						payload.getFirstName(),
+						payload.getLastName(),
+						payload.getEmail(),
+						payload.getPhone(),
+						payload.getPwd(),
+						payload.getAddr1(),
+						payload.getAddr2(),
+						payload.getAddr3(),
+						payload.getCity(),
+						payload.getCountry(),
+						payload.getPostalcode(),
+						payload.getEcshopId(),
+						payload.getGuestRecKey());
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		final Customer probe = new Customer();
+		probe.setCustId(response.getCustId());
+
+		final List<Customer> customer = this.customerRepository
+				.findAll(
+						Example.of(probe));
+
+		return ResponseEntity.ok(customer);
+
+	}
 	//
 	// private methods
 	//
@@ -86,15 +127,19 @@ public class ShellController {
 	private final Log log = LogFactory.getLog(ShellController.class);
 	private final ProcedureService procedureService;
 
+	private final CustomerRepository customerRepository;
+
 	//
 	// constructor
 	//
 
 	@Autowired
 	public ShellController(
-			final ProcedureService procedureService) {
+			final ProcedureService procedureService,
+			final CustomerRepository customerRepository) {
 
 		super();
 		this.procedureService = procedureService;
+		this.customerRepository = customerRepository;
 	}
 }

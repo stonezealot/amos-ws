@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,29 +35,6 @@ public class AppController {
 	//
 	// request mappings
 	//
-
-	@GetMapping("/tables")
-	public ResponseEntity<List<Opentable>> getTables(
-			@RequestParam final String shopId,
-			@RequestParam(required = false) final String sectionId,
-			@RequestParam(required = false) final Character statusFlg) {
-
-		final Opentable probe = new Opentable();
-		probe.setShopId(shopId);
-		// on optional sectionId
-		if (sectionId != null && !sectionId.isEmpty()) {
-			probe.setSectionId(sectionId);
-		}
-		// on optional Id
-		if (statusFlg != null) {
-			probe.setStatusFlg(statusFlg);
-		}
-		final List<Opentable> opentables = this.opentableRepository
-				.findAll(
-						Example.of(probe),
-						Sort.by("sortNum", "tableId"));
-		return ResponseEntity.ok(opentables);
-	}
 	
 	@GetMapping("/stocks")
 	public ResponseEntity<List<ECSTK>> getECStocks(
@@ -86,7 +64,7 @@ public class AppController {
 		
 		return ResponseEntity.ok(ecStkInfo);
 	}
-
+	
 
 	//
 	// private methods
