@@ -57,6 +57,8 @@ public class ShellController {
 	@PostMapping("/register")
 	public ResponseEntity<List<Customer>> register(
 			@RequestBody final EccustSignupPayload payload) {
+		
+		final String password = this.toUserPwd(payload.getPwd());
 
 		final ProcedureResponseWithCustId response = this.procedureService
 				.eccustSignup(
@@ -66,7 +68,7 @@ public class ShellController {
 						payload.getLastName(),
 						payload.getEmail(),
 						payload.getPhone(),
-						payload.getPwd(),
+						password,
 						payload.getAddr1(),
 						payload.getAddr2(),
 						payload.getAddr3(),
@@ -83,8 +85,7 @@ public class ShellController {
 		probe.setCustId(response.getCustId());
 
 		final List<Customer> customer = this.customerRepository
-				.findAll(
-						Example.of(probe));
+				.findByCustId(response.getCustId());
 
 		return ResponseEntity.ok(customer);
 

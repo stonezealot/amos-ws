@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class ECSTK {
+public class Ecstk {
 
 	@Id
 	private BigDecimal recKey;
@@ -26,7 +26,7 @@ public class ECSTK {
 	private String ref8;
 	private BigDecimal ewallet;
 
-	public ECSTK() {
+	public Ecstk() {
 		super();
 	}
 

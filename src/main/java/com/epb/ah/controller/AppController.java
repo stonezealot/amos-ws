@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.epb.ah.bean.ECSTKInfo;
-import com.epb.ah.entity.ECSTK;
-import com.epb.ah.entity.Opentable;
-import com.epb.ah.repository.EcStockRepository;
-import com.epb.ah.repository.OpentableRepository;
+import com.epb.ah.bean.EcstkInfo;
+import com.epb.ah.entity.Eccart;
+import com.epb.ah.entity.Ecstk;
+import com.epb.ah.repository.EcstkRepository;
+import com.epb.ah.repository.EccartRepository;
 
 @RestController
 @CrossOrigin
@@ -37,32 +37,43 @@ public class AppController {
 	//
 	
 	@GetMapping("/stocks")
-	public ResponseEntity<List<ECSTK>> getECStocks(
+	public ResponseEntity<List<Ecstk>> getEcstks(
 			@RequestParam final String orgId) {
 
-		final ECSTK probe = new ECSTK();
+		final Ecstk probe = new Ecstk();
 		probe.setOrgId(orgId);
 		// on optional sectionId
-		final List<ECSTK> ecStocks = this.ecStockRepository
+		final List<Ecstk> ecstks = this.ecstkRepository
 				.findAll(
 						Example.of(probe),
 						Sort.by("stkId"));
-		return ResponseEntity.ok(ecStocks);
+		return ResponseEntity.ok(ecstks);
 	}
 	
 	@GetMapping("/stocks/{recKey}")
-	public ResponseEntity<ECSTKInfo> getECStockInfo(
+	public ResponseEntity<EcstkInfo> getEcstkInfo(
 			@PathVariable final BigDecimal recKey){
-		final Optional<ECSTK> ecStk = this.ecStockRepository
+		final Optional<Ecstk> ecstk = this.ecstkRepository
 				.findById(recKey);
-		if(!ecStk.isPresent()) {
+		if(!ecstk.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		final ECSTKInfo ecStkInfo = new ECSTKInfo(
-				this.getECSTKFromJDBC(recKey));
+		final EcstkInfo ecstkInfo = new EcstkInfo(
+				this.getEcstkFromJDBC(recKey));
 		
-		return ResponseEntity.ok(ecStkInfo);
+		return ResponseEntity.ok(ecstkInfo);
+	}
+	
+	@GetMapping("/carts")
+	public ResponseEntity<List<Eccart>> getEccarts(
+			@RequestParam final String custId,
+			@RequestParam final String ecshopId){
+		
+		final List<Eccart> eccarts = this.eccartRepository
+				.findByCustIdAndEcshopId(custId, ecshopId);
+		
+		return ResponseEntity.ok(eccarts);
 	}
 	
 
@@ -70,12 +81,12 @@ public class AppController {
 	// private methods
 	//
 
-	private ECSTK getECSTKFromJDBC(final BigDecimal recKey) {
+	private Ecstk getEcstkFromJDBC(final BigDecimal recKey) {
 		// for situations where procedure (JDBC) has just updated the table
 		return this.jdbcTemplate.queryForObject(
 				"select * from ECSTK where rec_key = ?",
 				new Object[] { recKey },
-				BeanPropertyRowMapper.newInstance(ECSTK.class));
+				BeanPropertyRowMapper.newInstance(Ecstk.class));
 	}
 	
 	//
@@ -85,10 +96,9 @@ public class AppController {
 //	private final Log log = LogFactory.getLog(AppController.class);
 
 	private final JdbcTemplate jdbcTemplate;
-
-	private final OpentableRepository opentableRepository;
 	
-	private final EcStockRepository ecStockRepository;
+	private final EcstkRepository ecstkRepository;
+	private final EccartRepository eccartRepository;
 	
 
 
@@ -103,16 +113,16 @@ public class AppController {
 	@Autowired
 	public AppController(
 			final JdbcTemplate jdbcTemplate,
-			final OpentableRepository opentableRepository,
-			final EcStockRepository ecStockRepository) {
+			final EcstkRepository ecstkRepository,
+			final EccartRepository eccartRepository) {
 
 		super();
 
 		this.jdbcTemplate = jdbcTemplate;
 		this.jdbcTemplate.setResultsMapCaseInsensitive(true);
 
-		this.opentableRepository = opentableRepository;
-		this.ecStockRepository = ecStockRepository;
+		this.ecstkRepository = ecstkRepository;
+		this.eccartRepository = eccartRepository;
 		
 	}
 

@@ -1,21 +1,21 @@
 package com.epb.ah.bean;
 
-import com.epb.ah.entity.ECSTK;
+import com.epb.ah.entity.Ecstk;
 
-public class ECSTKInfo {
+public class EcstkInfo {
 
-	private ECSTK ecStk;
+	private Ecstk ecStk;
 
-	public ECSTKInfo(ECSTK ecStk) {
+	public EcstkInfo(Ecstk ecStk) {
 		super();
 		this.ecStk = ecStk;
 	}
 
-	public ECSTK getEcStk() {
+	public Ecstk getEcStk() {
 		return ecStk;
 	}
 
-	public void setEcStk(ECSTK ecStk) {
+	public void setEcStk(Ecstk ecStk) {
 		this.ecStk = ecStk;
 	}
 

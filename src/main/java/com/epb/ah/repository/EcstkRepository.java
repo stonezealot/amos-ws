@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.epb.ah.entity.ECSTK;
+import com.epb.ah.entity.Ecstk;
 
-public interface EcStockRepository
-		extends JpaRepository<ECSTK, BigDecimal> {
+public interface EcstkRepository
+		extends JpaRepository<Ecstk, BigDecimal> {
 
 }
