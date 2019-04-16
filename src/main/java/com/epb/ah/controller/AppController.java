@@ -22,11 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Eccart;
+import com.epb.ah.entity.EccartlineView;
 import com.epb.ah.entity.EcskuOverviewPicture;
 import com.epb.ah.entity.EcskuSpecPicture;
 import com.epb.ah.entity.Ecstk;
 import com.epb.ah.repository.EcstkRepository;
 import com.epb.ah.repository.EccartRepository;
+import com.epb.ah.repository.EccartlineViewRepository;
 import com.epb.ah.repository.EcskuOverviewPictureRepository;
 import com.epb.ah.repository.EcskuSpecPictureRepository;
 
@@ -79,6 +81,17 @@ public class AppController {
 		return ResponseEntity.ok(eccarts);
 	}
 
+	@GetMapping("/cartlines")
+	public ResponseEntity<List<EccartlineView>> getEccartlines(
+			@RequestParam final String custId,
+			@RequestParam final String ecshopId) {
+
+		final List<EccartlineView> eccartlineViews = this.eccartlineViewRepository
+				.findByCustIdAndEcshopId(custId, ecshopId);
+
+		return ResponseEntity.ok(eccartlineViews);
+	}
+
 	@GetMapping("/overviews")
 	public ResponseEntity<List<EcskuOverviewPicture>> getOverviewPictures(
 			@RequestParam final String stkId,
@@ -97,7 +110,7 @@ public class AppController {
 
 		return ResponseEntity.ok(ecskuOverviewPictures);
 	}
-	
+
 	@GetMapping("/specs")
 	public ResponseEntity<List<EcskuSpecPicture>> getSpecPictures(
 			@RequestParam final String stkId,
@@ -139,6 +152,7 @@ public class AppController {
 
 	private final EcstkRepository ecstkRepository;
 	private final EccartRepository eccartRepository;
+	private final EccartlineViewRepository eccartlineViewRepository;
 	private final EcskuOverviewPictureRepository ecskuOverviewPictureRepository;
 	private final EcskuSpecPictureRepository ecskuSpecPictureRepository;
 
@@ -155,6 +169,7 @@ public class AppController {
 			final JdbcTemplate jdbcTemplate,
 			final EcstkRepository ecstkRepository,
 			final EccartRepository eccartRepository,
+			final EccartlineViewRepository eccartlineViewRepository,
 			final EcskuOverviewPictureRepository ecskuOverviewPictureRepository,
 			final EcskuSpecPictureRepository ecskuSpecPictureRepository) {
 
@@ -165,6 +180,7 @@ public class AppController {
 
 		this.ecstkRepository = ecstkRepository;
 		this.eccartRepository = eccartRepository;
+		this.eccartlineViewRepository = eccartlineViewRepository;
 		this.ecskuOverviewPictureRepository = ecskuOverviewPictureRepository;
 		this.ecskuSpecPictureRepository = ecskuSpecPictureRepository;
 
