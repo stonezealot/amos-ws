@@ -1,6 +1,5 @@
 package com.epb.ah.controller;
 
-
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 
@@ -23,9 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Eccart;
+import com.epb.ah.entity.EcskuOverviewPicture;
+import com.epb.ah.entity.EcskuSpecPicture;
 import com.epb.ah.entity.Ecstk;
 import com.epb.ah.repository.EcstkRepository;
 import com.epb.ah.repository.EccartRepository;
+import com.epb.ah.repository.EcskuOverviewPictureRepository;
+import com.epb.ah.repository.EcskuSpecPictureRepository;
 
 @RestController
 @CrossOrigin
@@ -35,7 +38,7 @@ public class AppController {
 	//
 	// request mappings
 	//
-	
+
 	@GetMapping("/stocks")
 	public ResponseEntity<List<Ecstk>> getEcstks(
 			@RequestParam final String orgId) {
@@ -49,33 +52,70 @@ public class AppController {
 						Sort.by("stkId"));
 		return ResponseEntity.ok(ecstks);
 	}
-	
+
 	@GetMapping("/stocks/{recKey}")
 	public ResponseEntity<EcstkInfo> getEcstkInfo(
-			@PathVariable final BigDecimal recKey){
+			@PathVariable final BigDecimal recKey) {
 		final Optional<Ecstk> ecstk = this.ecstkRepository
 				.findById(recKey);
-		if(!ecstk.isPresent()) {
+		if (!ecstk.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		final EcstkInfo ecstkInfo = new EcstkInfo(
 				this.getEcstkFromJDBC(recKey));
-		
+
 		return ResponseEntity.ok(ecstkInfo);
 	}
-	
+
 	@GetMapping("/carts")
 	public ResponseEntity<List<Eccart>> getEccarts(
 			@RequestParam final String custId,
-			@RequestParam final String ecshopId){
-		
+			@RequestParam final String ecshopId) {
+
 		final List<Eccart> eccarts = this.eccartRepository
 				.findByCustIdAndEcshopId(custId, ecshopId);
-		
+
 		return ResponseEntity.ok(eccarts);
 	}
+
+	@GetMapping("/overviews")
+	public ResponseEntity<List<EcskuOverviewPicture>> getOverviewPictures(
+			@RequestParam final String stkId,
+			@RequestParam(required = false) final String orgId) {
+		final EcskuOverviewPicture probe = new EcskuOverviewPicture();
+		probe.setStkId(stkId);
+
+		if (orgId != null && !orgId.isEmpty()) {
+			probe.setOrgId(orgId);
+		}
+
+		final List<EcskuOverviewPicture> ecskuOverviewPictures = this.ecskuOverviewPictureRepository
+				.findAll(
+						Example.of(probe),
+						Sort.by("sortNum"));
+
+		return ResponseEntity.ok(ecskuOverviewPictures);
+	}
 	
+	@GetMapping("/specs")
+	public ResponseEntity<List<EcskuSpecPicture>> getSpecPictures(
+			@RequestParam final String stkId,
+			@RequestParam(required = false) final String orgId) {
+		final EcskuSpecPicture probe = new EcskuSpecPicture();
+		probe.setStkId(stkId);
+
+		if (orgId != null && !orgId.isEmpty()) {
+			probe.setOrgId(orgId);
+		}
+
+		final List<EcskuSpecPicture> ecskuSpecPictures = this.ecskuSpecPictureRepository
+				.findAll(
+						Example.of(probe),
+						Sort.by("sortNum"));
+
+		return ResponseEntity.ok(ecskuSpecPictures);
+	}
 
 	//
 	// private methods
@@ -88,7 +128,7 @@ public class AppController {
 				new Object[] { recKey },
 				BeanPropertyRowMapper.newInstance(Ecstk.class));
 	}
-	
+
 	//
 	// fields
 	//
@@ -96,11 +136,11 @@ public class AppController {
 //	private final Log log = LogFactory.getLog(AppController.class);
 
 	private final JdbcTemplate jdbcTemplate;
-	
+
 	private final EcstkRepository ecstkRepository;
 	private final EccartRepository eccartRepository;
-	
-
+	private final EcskuOverviewPictureRepository ecskuOverviewPictureRepository;
+	private final EcskuSpecPictureRepository ecskuSpecPictureRepository;
 
 	private final String dateFormatPattern = "yyyy-MM-dd";
 	final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
@@ -114,7 +154,9 @@ public class AppController {
 	public AppController(
 			final JdbcTemplate jdbcTemplate,
 			final EcstkRepository ecstkRepository,
-			final EccartRepository eccartRepository) {
+			final EccartRepository eccartRepository,
+			final EcskuOverviewPictureRepository ecskuOverviewPictureRepository,
+			final EcskuSpecPictureRepository ecskuSpecPictureRepository) {
 
 		super();
 
@@ -123,7 +165,9 @@ public class AppController {
 
 		this.ecstkRepository = ecstkRepository;
 		this.eccartRepository = eccartRepository;
-		
+		this.ecskuOverviewPictureRepository = ecskuOverviewPictureRepository;
+		this.ecskuSpecPictureRepository = ecskuSpecPictureRepository;
+
 	}
 
 }
