@@ -28,7 +28,7 @@ public class ProcedureServiceOracle
 			final String pwd,
 			final String ecshopId,
 			final String guestRecKey) {
-		
+
 		final SqlParameterSource in = new MapSqlParameterSource()
 				.addValue("v_charset", charset)
 				.addValue("v_org_id", orgId)
@@ -36,21 +36,21 @@ public class ProcedureServiceOracle
 				.addValue("v_pwd", pwd)
 				.addValue("v_ecshop_id", ecshopId)
 				.addValue("v_guest_rec_key", guestRecKey);
-		
+
 		final Map<String, Object> out = this.eccustLoginCall.execute(in);
 		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
 			throw new RuntimeException((String) out.get("v_err_msg"));
 		}
-		
+
 		final Home home = new Home();
 		home.setCustId((String) out.get("v_cust_id"));
 		home.setCustName((String) out.get("v_cust_name"));
 		home.setClassId((String) out.get("v_class_id"));
-		
+
 		return home;
-		
+
 	}
-	
+
 	@Override
 	public ProcedureResponseWithCustId eccustSignup(
 			final String charset,
@@ -90,7 +90,7 @@ public class ProcedureServiceOracle
 		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
 			throw new RuntimeException((String) out.get("v_err_msg"));
 		}
-		
+
 		final ProcedureResponseWithCustId response = new ProcedureResponseWithCustId(
 				(String) out.get("v_err_code"),
 				(String) out.get("v_err_msg"),
@@ -100,38 +100,63 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
+	@Override
+	public ProcedureResponse ecEditCartInc(
+			final String charset,
+			final String recKey,
+			final String orgId,
+			final String custId,
+			final String ecshopId) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_rec_key", recKey)
+				.addValue("v_org_id", orgId)
+				.addValue("v_cust_id", custId)
+				.addValue("v_ecshop_id", ecshopId);
+
+		final Map<String, Object> out = this.ecEditCartIncCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponse response = new ProcedureResponse(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"));
+
+		return response;
+	}
+
 	//
 	// fields
 	//
-	
+
 	private final JdbcTemplate jdbcTemplate;
-	
+
 	private final SimpleJdbcCall eccustLoginCall;
 	private final SimpleJdbcCall eccustSignupCall;
-	
+	private final SimpleJdbcCall ecEditCartIncCall;
+
 	//
 	// constructor
 	//
-	
+
 	@Autowired
 	public ProcedureServiceOracle(final JdbcTemplate jdbcTemplate) {
 		super();
 		this.jdbcTemplate = jdbcTemplate;
 		this.jdbcTemplate.setResultsMapCaseInsensitive(true);
-		
+
 		this.eccustLoginCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("eccust_login");
 		this.eccustSignupCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("eccust_signup");
+		this.ecEditCartIncCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("ec_edit_cart_inc");
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }

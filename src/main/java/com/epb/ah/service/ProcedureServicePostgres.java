@@ -27,7 +27,7 @@ public class ProcedureServicePostgres
 		home.setClassId("01");
 		return home;
 	}
-	
+
 	@Override
 	public ProcedureResponseWithCustId eccustSignup(
 			final String charset,
@@ -47,5 +47,16 @@ public class ProcedureServicePostgres
 			final String guestRecKey) {
 
 		return new ProcedureResponseWithCustId(ERR_CODE_OK, "");
+	}
+
+	@Override
+	public ProcedureResponse ecEditCartInc(
+			final String charset,
+			final String recKey,
+			final String orgId,
+			final String custId,
+			final String ecshopId) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
 }

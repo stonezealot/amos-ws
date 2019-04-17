@@ -28,6 +28,13 @@ public interface ProcedureService {
 			String postalcode,
 			String ecshopId,
 			String guestRecKey);
+	
+	ProcedureResponse ecEditCartInc(
+			String charset,
+			String recKey,
+			String orgId,
+			String custId,
+			String ecshopId);
 
 	static final String ERR_CODE_OK = "OK";
 }

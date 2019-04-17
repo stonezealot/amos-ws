@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.epb.ah.bean.CartlineQtyPlusPayload;
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
@@ -31,6 +33,8 @@ import com.epb.ah.repository.EccartRepository;
 import com.epb.ah.repository.EccartlineViewRepository;
 import com.epb.ah.repository.EcskuOverviewPictureRepository;
 import com.epb.ah.repository.EcskuSpecPictureRepository;
+import com.epb.ah.service.ProcedureResponse;
+import com.epb.ah.service.ProcedureService;
 
 @RestController
 @CrossOrigin
@@ -130,6 +134,26 @@ public class AppController {
 		return ResponseEntity.ok(ecskuSpecPictures);
 	}
 
+	@PostMapping("/cartlines/{recKey}/qty-plus")
+	public ResponseEntity<List<EccartlineView>> cartlineQtyPlus(
+			@PathVariable final String recKey,
+			@RequestBody final CartlineQtyPlusPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecEditCartInc(
+						"",
+						recKey,
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId());
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
+
+	}
+
 	//
 	// private methods
 	//
@@ -156,6 +180,8 @@ public class AppController {
 	private final EcskuOverviewPictureRepository ecskuOverviewPictureRepository;
 	private final EcskuSpecPictureRepository ecskuSpecPictureRepository;
 
+	private final ProcedureService procedureService;
+
 	private final String dateFormatPattern = "yyyy-MM-dd";
 	final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
 			this.dateFormatPattern);
@@ -167,6 +193,7 @@ public class AppController {
 	@Autowired
 	public AppController(
 			final JdbcTemplate jdbcTemplate,
+			final ProcedureService procedureService,
 			final EcstkRepository ecstkRepository,
 			final EccartRepository eccartRepository,
 			final EccartlineViewRepository eccartlineViewRepository,
@@ -177,6 +204,8 @@ public class AppController {
 
 		this.jdbcTemplate = jdbcTemplate;
 		this.jdbcTemplate.setResultsMapCaseInsensitive(true);
+
+		this.procedureService = procedureService;
 
 		this.ecstkRepository = ecstkRepository;
 		this.eccartRepository = eccartRepository;
