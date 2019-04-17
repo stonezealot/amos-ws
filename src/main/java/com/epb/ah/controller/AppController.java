@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.epb.ah.bean.CartlineQtyPlusPayload;
+import com.epb.ah.bean.CartlineQtyPayload;
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
@@ -137,10 +137,30 @@ public class AppController {
 	@PostMapping("/cartlines/{recKey}/qty-plus")
 	public ResponseEntity<List<EccartlineView>> cartlineQtyPlus(
 			@PathVariable final String recKey,
-			@RequestBody final CartlineQtyPlusPayload payload) {
+			@RequestBody final CartlineQtyPayload payload) {
 
 		final ProcedureResponse response = this.procedureService
 				.ecEditCartInc(
+						"",
+						recKey,
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId());
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
+
+	}
+	
+	@PostMapping("/cartlines/{recKey}/qty-minus")
+	public ResponseEntity<List<EccartlineView>> cartlineQtyMinus(
+			@PathVariable final String recKey,
+			@RequestBody final CartlineQtyPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecEditCartDec(
 						"",
 						recKey,
 						payload.getOrgId(),

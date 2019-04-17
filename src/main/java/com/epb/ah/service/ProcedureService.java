@@ -35,6 +35,13 @@ public interface ProcedureService {
 			String orgId,
 			String custId,
 			String ecshopId);
+	
+	ProcedureResponse ecEditCartDec(
+			String charset,
+			String recKey,
+			String orgId,
+			String custId,
+			String ecshopId);
 
 	static final String ERR_CODE_OK = "OK";
 }

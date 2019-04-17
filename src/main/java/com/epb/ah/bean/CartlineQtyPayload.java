@@ -1,12 +1,12 @@
 package com.epb.ah.bean;
 
-public class CartlineQtyPlusPayload {
+public class CartlineQtyPayload {
 
 	private String orgId;
 	private String custId;
 	private String ecshopId;
 
-	public CartlineQtyPlusPayload() {
+	public CartlineQtyPayload() {
 		super();
 	}
 
