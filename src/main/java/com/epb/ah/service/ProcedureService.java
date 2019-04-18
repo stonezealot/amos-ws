@@ -11,7 +11,7 @@ public interface ProcedureService {
 			String pwd,
 			String ecshopId,
 			String guestRecKey);
-	
+
 	ProcedureResponseWithCustId eccustSignup(
 			String charset,
 			String orgId,
@@ -28,20 +28,31 @@ public interface ProcedureService {
 			String postalcode,
 			String ecshopId,
 			String guestRecKey);
-	
+
 	ProcedureResponse ecEditCartInc(
 			String charset,
 			String recKey,
 			String orgId,
 			String custId,
 			String ecshopId);
-	
+
 	ProcedureResponse ecEditCartDec(
 			String charset,
 			String recKey,
 			String orgId,
 			String custId,
 			String ecshopId);
+
+	ProcedureResponse ecAddCart(
+			String charset,
+			String orgId,
+			String custId,
+			String guestFlg,
+			String ecshopId,
+			String stkId,
+			String qty,
+			String cashcarry,
+			String installationFlg);
 
 	static final String ERR_CODE_OK = "OK";
 }

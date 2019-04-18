@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.epb.ah.bean.AddToCartPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Eccart;
@@ -172,6 +173,29 @@ public class AppController {
 
 		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
 
+	}
+	
+	@PostMapping("add-to-cart")
+	public ResponseEntity<List<EccartlineView>> addToCart(
+			@RequestBody final AddToCartPayload payload){
+		
+		final ProcedureResponse response = this.procedureService
+				.ecAddCart(
+						"", 
+						payload.getOrgId(), 
+						payload.getCustId(), 
+						payload.getGuestFlg(), 
+						payload.getEcshopId(), 
+						payload.getStkId(), 
+						payload.getQty(),
+						payload.getCashcarry(),
+						payload.getInstallationFlg());
+		
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+		
+		return this.getEccartlines(payload.getCustId(), payload.getEcshopId()); 
 	}
 
 	//
