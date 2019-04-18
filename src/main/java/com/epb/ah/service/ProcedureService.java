@@ -53,6 +53,13 @@ public interface ProcedureService {
 			String qty,
 			String cashcarry,
 			String installationFlg);
+	
+	ProcedureResponse ecDeleteCart(
+			String charset,
+			String recKey,
+			String orgId,
+			String custId,
+			String ecshopId);
 
 	static final String ERR_CODE_OK = "OK";
 }

@@ -189,6 +189,33 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
+	
+	@Override
+	public ProcedureResponse ecDeleteCart(
+			final String charset,
+			final String recKey,
+			final String orgId,
+			final String custId,
+			final String ecshopId) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_rec_key", recKey)
+				.addValue("v_org_id", orgId)
+				.addValue("v_cust_id", custId)
+				.addValue("v_ecshop_id", ecshopId);
+
+		final Map<String, Object> out = this.ecDeleteCartCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponse response = new ProcedureResponse(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"));
+
+		return response;
+	}
 	//
 	// fields
 	//
@@ -200,6 +227,7 @@ public class ProcedureServiceOracle
 	private final SimpleJdbcCall ecEditCartIncCall;
 	private final SimpleJdbcCall ecEditCartDecCall;
 	private final SimpleJdbcCall ecAddCartCall;
+	private final SimpleJdbcCall ecDeleteCartCall;
 
 	//
 	// constructor
@@ -226,6 +254,9 @@ public class ProcedureServiceOracle
 		this.ecAddCartCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("ec_add_cart");
+		this.ecDeleteCartCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("ec_delete_cart");
 	}
 
 }

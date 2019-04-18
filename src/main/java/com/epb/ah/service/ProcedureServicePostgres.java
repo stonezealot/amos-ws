@@ -85,4 +85,15 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
+
+	@Override
+	public ProcedureResponse ecDeleteCart(
+			final String charset,
+			final String recKey,
+			final String orgId,
+			final String custId,
+			final String ecshopId) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
+	}
 }

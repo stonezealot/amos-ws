@@ -154,7 +154,7 @@ public class AppController {
 		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
 
 	}
-	
+
 	@PostMapping("/cartlines/{recKey}/qty-minus")
 	public ResponseEntity<List<EccartlineView>> cartlineQtyMinus(
 			@PathVariable final String recKey,
@@ -174,28 +174,49 @@ public class AppController {
 		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
 
 	}
-	
-	@PostMapping("add-to-cart")
-	public ResponseEntity<List<EccartlineView>> addToCart(
-			@RequestBody final AddToCartPayload payload){
-		
+
+	@PostMapping("/cartlines/{recKey}/delete")
+	public ResponseEntity<List<EccartlineView>> cartlineDelete(
+			@PathVariable final String recKey,
+			@RequestBody final CartlineQtyPayload payload) {
+
 		final ProcedureResponse response = this.procedureService
-				.ecAddCart(
-						"", 
-						payload.getOrgId(), 
-						payload.getCustId(), 
-						payload.getGuestFlg(), 
-						payload.getEcshopId(), 
-						payload.getStkId(), 
-						payload.getQty(),
-						payload.getCashcarry(),
-						payload.getInstallationFlg());
-		
+				.ecDeleteCart(
+						"",
+						recKey,
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId());
+
 		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
 			throw new RuntimeException(response.getErrMsg());
 		}
-		
-		return this.getEccartlines(payload.getCustId(), payload.getEcshopId()); 
+
+		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
+
+	}
+
+	@PostMapping("add-to-cart")
+	public ResponseEntity<List<EccartlineView>> addToCart(
+			@RequestBody final AddToCartPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecAddCart(
+						"",
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getGuestFlg(),
+						payload.getEcshopId(),
+						payload.getStkId(),
+						payload.getQty(),
+						payload.getCashcarry(),
+						payload.getInstallationFlg());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
 	}
 
 	//
