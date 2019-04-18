@@ -43,6 +43,15 @@ public interface ProcedureService {
 			String custId,
 			String ecshopId);
 
+	ProcedureResponse ecEditCartQty(
+			String charset,
+			String recKey,
+			String orgId,
+			String custId,
+			String ecshopId,
+			String stkId,
+			String qty);
+
 	ProcedureResponse ecAddCart(
 			String charset,
 			String orgId,
@@ -53,7 +62,7 @@ public interface ProcedureService {
 			String qty,
 			String cashcarry,
 			String installationFlg);
-	
+
 	ProcedureResponse ecDeleteCart(
 			String charset,
 			String recKey,
