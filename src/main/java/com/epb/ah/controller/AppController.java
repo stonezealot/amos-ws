@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.epb.ah.bean.AddToCartPayload;
+import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
 import com.epb.ah.bean.EcstkInfo;
@@ -190,6 +191,28 @@ public class AppController {
 						payload.getEcshopId(),
 						payload.getStkId(),
 						payload.getQty());
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
+
+	}
+
+	@PostMapping("/cartlines/{recKey}/edit-installation")
+	public ResponseEntity<List<EccartlineView>> cartlineEditInstallation(
+			@PathVariable final String recKey,
+			@RequestBody final CartlineEditInstallationPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecEditCartQty(
+						"",
+						recKey,
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId(),
+						payload.getStkId(),
+						payload.getInstallation());
 		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
 			throw new RuntimeException(response.getErrMsg());
 		}

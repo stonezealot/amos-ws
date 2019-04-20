@@ -83,6 +83,19 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
+	
+	@Override
+	public ProcedureResponse ecEditCartInstallation(
+			final String charset,
+			final String recKey,
+			final String orgId,
+			final String custId,
+			final String ecshopId,
+			final String stkId,
+			final String installation) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
+	}
 
 	@Override
 	public ProcedureResponse ecAddCart(
