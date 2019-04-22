@@ -60,6 +60,16 @@ public interface ProcedureService {
 			String ecshopId,
 			String stkId,
 			String installation);
+	
+	ProcedureResponse ecEditCartCashcarry(
+			String charset,
+			String recKey,
+			String orgId,
+			String custId,
+			String ecshopId,
+			String stkId,
+			String cashcarry);
+	
 
 	ProcedureResponse ecAddCart(
 			String charset,

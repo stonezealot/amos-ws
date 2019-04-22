@@ -218,6 +218,37 @@ public class ProcedureServiceOracle
 	}
 	
 	@Override
+	public ProcedureResponse ecEditCartCashcarry(
+			final String charset,
+			final String recKey,
+			final String orgId,
+			final String custId,
+			final String ecshopId,
+			final String stkId,
+			final String cashcarry) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_rec_key", recKey)
+				.addValue("v_org_id", orgId)
+				.addValue("v_cust_id", custId)
+				.addValue("v_ecshop_id", ecshopId)
+				.addValue("v_stk_id", stkId)
+				.addValue("v_cashcarry", cashcarry);
+
+		final Map<String, Object> out = this.ecEditCartCashcarrryCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponse response = new ProcedureResponse(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"));
+
+		return response;
+	}
+	
+	@Override
 	public ProcedureResponse ecAddCart(
 			final String charset,
 			final String orgId,
@@ -290,6 +321,7 @@ public class ProcedureServiceOracle
 	private final SimpleJdbcCall ecEditCartDecCall;
 	private final SimpleJdbcCall ecEditCartQtyCall;
 	private final SimpleJdbcCall ecEditCartInstallationCall;
+	private final SimpleJdbcCall ecEditCartCashcarrryCall;
 	private final SimpleJdbcCall ecAddCartCall;
 	private final SimpleJdbcCall ecDeleteCartCall;
 	
@@ -322,6 +354,9 @@ public class ProcedureServiceOracle
 		this.ecEditCartInstallationCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("ec_edit_cart_installation");
+		this.ecEditCartCashcarrryCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("ec_edit_cart_cashcarry");
 		this.ecAddCartCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("ec_add_cart");

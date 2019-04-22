@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.epb.ah.bean.AddToCartPayload;
+import com.epb.ah.bean.CartlineEditCashcarryPayload;
 import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
@@ -205,7 +206,7 @@ public class AppController {
 			@RequestBody final CartlineEditInstallationPayload payload) {
 
 		final ProcedureResponse response = this.procedureService
-				.ecEditCartQty(
+				.ecEditCartInstallation(
 						"",
 						recKey,
 						payload.getOrgId(),
@@ -213,6 +214,28 @@ public class AppController {
 						payload.getEcshopId(),
 						payload.getStkId(),
 						payload.getInstallation());
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
+
+	}
+	
+	@PostMapping("/cartlines/{recKey}/edit-cashcarry")
+	public ResponseEntity<List<EccartlineView>> cartlineEditCashcarry(
+			@PathVariable final String recKey,
+			@RequestBody final CartlineEditCashcarryPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecEditCartCashcarry(
+						"",
+						recKey,
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId(),
+						payload.getStkId(),
+						payload.getCashcarry());
 		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
 			throw new RuntimeException(response.getErrMsg());
 		}
