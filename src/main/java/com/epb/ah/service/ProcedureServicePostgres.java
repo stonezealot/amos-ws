@@ -70,7 +70,7 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
-	
+
 	@Override
 	public ProcedureResponse ecEditCartQty(
 			final String charset,
@@ -83,7 +83,7 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
-	
+
 	@Override
 	public ProcedureResponse ecEditCartInstallation(
 			final String charset,
@@ -96,7 +96,7 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
-	
+
 	@Override
 	public ProcedureResponse ecEditCartCashcarry(
 			final String charset,
@@ -132,6 +132,20 @@ public class ProcedureServicePostgres
 			final String orgId,
 			final String custId,
 			final String ecshopId) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
+	}
+
+	@Override
+	public ProcedureResponse eccustUpdate(
+			final String charset,
+			final String recKey,
+			final String custName,
+			final String email,
+			final String phone,
+			final String addr1,
+			final String addr2,
+			final String postalcode) {
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}

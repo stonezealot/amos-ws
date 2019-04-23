@@ -26,13 +26,16 @@ import com.epb.ah.bean.CartlineEditCashcarryPayload;
 import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
+import com.epb.ah.bean.CustomerUpdatePayload;
 import com.epb.ah.bean.EcstkInfo;
+import com.epb.ah.entity.Customer;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
 import com.epb.ah.entity.EcskuOverviewPicture;
 import com.epb.ah.entity.EcskuSpecPicture;
 import com.epb.ah.entity.Ecstk;
 import com.epb.ah.repository.EcstkRepository;
+import com.epb.ah.repository.CustomerRepository;
 import com.epb.ah.repository.EccartRepository;
 import com.epb.ah.repository.EccartlineViewRepository;
 import com.epb.ah.repository.EcskuOverviewPictureRepository;
@@ -76,6 +79,17 @@ public class AppController {
 				this.getEcstkFromJDBC(recKey));
 
 		return ResponseEntity.ok(ecstkInfo);
+	}
+
+	@GetMapping("/customer")
+	public ResponseEntity<List<Customer>> getCustomer(
+			@RequestParam final String custId,
+			@RequestParam final String orgId) {
+
+		final List<Customer> customer = this.customerRepository
+				.findByCustIdAndOrgId(custId, orgId);
+
+		return ResponseEntity.ok(customer);
 	}
 
 	@GetMapping("/carts")
@@ -136,6 +150,30 @@ public class AppController {
 						Sort.by("sortNum"));
 
 		return ResponseEntity.ok(ecskuSpecPictures);
+	}
+
+	@PostMapping("/customer/{recKey}/update")
+	public ResponseEntity<List<Customer>> customerUpdate(
+			@PathVariable final String recKey,
+			@RequestBody final CustomerUpdatePayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.eccustUpdate(
+						"",
+						recKey,
+						payload.getCustName(),
+						payload.getEmail(),
+						payload.getPhone(),
+						payload.getAddr1(),
+						payload.getAddr2(),
+						payload.getPostalcode());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getCustomer(payload.getCustId(), payload.getOrgId());
+
 	}
 
 	@PostMapping("/cartlines/{recKey}/qty-plus")
@@ -221,7 +259,7 @@ public class AppController {
 		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
 
 	}
-	
+
 	@PostMapping("/cartlines/{recKey}/edit-cashcarry")
 	public ResponseEntity<List<EccartlineView>> cartlineEditCashcarry(
 			@PathVariable final String recKey,
@@ -308,6 +346,7 @@ public class AppController {
 
 	private final JdbcTemplate jdbcTemplate;
 
+	private final CustomerRepository customerRepository;
 	private final EcstkRepository ecstkRepository;
 	private final EccartRepository eccartRepository;
 	private final EccartlineViewRepository eccartlineViewRepository;
@@ -328,6 +367,7 @@ public class AppController {
 	public AppController(
 			final JdbcTemplate jdbcTemplate,
 			final ProcedureService procedureService,
+			final CustomerRepository customerRepository,
 			final EcstkRepository ecstkRepository,
 			final EccartRepository eccartRepository,
 			final EccartlineViewRepository eccartlineViewRepository,
@@ -341,6 +381,7 @@ public class AppController {
 
 		this.procedureService = procedureService;
 
+		this.customerRepository = customerRepository;
 		this.ecstkRepository = ecstkRepository;
 		this.eccartRepository = eccartRepository;
 		this.eccartlineViewRepository = eccartlineViewRepository;

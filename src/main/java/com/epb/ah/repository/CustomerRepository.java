@@ -11,5 +11,5 @@ import com.epb.ah.entity.Customer;
 public interface CustomerRepository
 		extends JpaRepository<Customer, BigDecimal> {
 
-	List<Customer> findByCustId(String custId);
+	List<Customer> findByCustIdAndOrgId(String custId,String orgId);
 }

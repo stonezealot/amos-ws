@@ -309,6 +309,39 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
+	
+	@Override
+	public ProcedureResponse eccustUpdate(
+			final String charset,
+			final String recKey,
+			final String custName,
+			final String email,
+			final String phone,
+			final String addr1,
+			final String addr2,
+			final String postalcode) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_rec_key", recKey)
+				.addValue("v_cust_name", custName)
+				.addValue("v_email", email)
+				.addValue("v_phone", phone)
+				.addValue("v_addr1", addr1)
+				.addValue("v_addr2", addr2)
+				.addValue("v_postalcode", postalcode);
+
+		final Map<String, Object> out = this.eccustUpdateCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponse response = new ProcedureResponse(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"));
+
+		return response;
+	}
 	//
 	// fields
 	//
@@ -324,6 +357,7 @@ public class ProcedureServiceOracle
 	private final SimpleJdbcCall ecEditCartCashcarrryCall;
 	private final SimpleJdbcCall ecAddCartCall;
 	private final SimpleJdbcCall ecDeleteCartCall;
+	private final SimpleJdbcCall eccustUpdateCall;
 	
 
 	//
@@ -363,6 +397,9 @@ public class ProcedureServiceOracle
 		this.ecDeleteCartCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("ec_delete_cart");
+		this.eccustUpdateCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("eccust_update");
 	}
 
 }

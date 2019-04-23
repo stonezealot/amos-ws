@@ -57,7 +57,7 @@ public class ShellController {
 	@PostMapping("/register")
 	public ResponseEntity<List<Customer>> register(
 			@RequestBody final EccustSignupPayload payload) {
-		
+
 		final String password = this.toUserPwd(payload.getPwd());
 
 		final ProcedureResponseWithCustId response = this.procedureService
@@ -81,15 +81,13 @@ public class ShellController {
 			throw new RuntimeException(response.getErrMsg());
 		}
 
-		final Customer probe = new Customer();
-		probe.setCustId(response.getCustId());
-
 		final List<Customer> customer = this.customerRepository
-				.findByCustId(response.getCustId());
+				.findByCustIdAndOrgId(response.getCustId(), payload.getOrgId());
 
 		return ResponseEntity.ok(customer);
 
 	}
+
 	//
 	// private methods
 	//

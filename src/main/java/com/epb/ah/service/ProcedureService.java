@@ -51,7 +51,7 @@ public interface ProcedureService {
 			String ecshopId,
 			String stkId,
 			String qty);
-	
+
 	ProcedureResponse ecEditCartInstallation(
 			String charset,
 			String recKey,
@@ -60,7 +60,7 @@ public interface ProcedureService {
 			String ecshopId,
 			String stkId,
 			String installation);
-	
+
 	ProcedureResponse ecEditCartCashcarry(
 			String charset,
 			String recKey,
@@ -69,7 +69,6 @@ public interface ProcedureService {
 			String ecshopId,
 			String stkId,
 			String cashcarry);
-	
 
 	ProcedureResponse ecAddCart(
 			String charset,
@@ -88,10 +87,16 @@ public interface ProcedureService {
 			String orgId,
 			String custId,
 			String ecshopId);
-	
-	
-	
-	
+
+	ProcedureResponse eccustUpdate(
+			String charset,
+			String recKey,
+			String custName,
+			String email,
+			String phone,
+			String addr1,
+			String addr2,
+			String postalcode);
 
 	static final String ERR_CODE_OK = "OK";
 }
