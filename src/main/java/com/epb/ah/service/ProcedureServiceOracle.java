@@ -1,7 +1,5 @@
 package com.epb.ah.service;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -342,6 +340,31 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
+	
+	@Override
+	public ProcedureResponse ecChangePassword(
+			final String charset,
+			final String recKey,
+			final String oldPassword,
+			final String newPassword) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_rec_key", recKey)
+				.addValue("v_old_password", oldPassword)
+				.addValue("v_new_password", newPassword);
+
+		final Map<String, Object> out = this.ecChangePasswordCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponse response = new ProcedureResponse(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"));
+
+		return response;
+	}
 	//
 	// fields
 	//
@@ -358,6 +381,7 @@ public class ProcedureServiceOracle
 	private final SimpleJdbcCall ecAddCartCall;
 	private final SimpleJdbcCall ecDeleteCartCall;
 	private final SimpleJdbcCall eccustUpdateCall;
+	private final SimpleJdbcCall ecChangePasswordCall;
 	
 
 	//
@@ -400,6 +424,9 @@ public class ProcedureServiceOracle
 		this.eccustUpdateCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("eccust_update");
+		this.ecChangePasswordCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("ec_change_password");
 	}
 
 }

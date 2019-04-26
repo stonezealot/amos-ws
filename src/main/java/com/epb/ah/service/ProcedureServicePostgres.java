@@ -1,6 +1,5 @@
 package com.epb.ah.service;
 
-import java.math.BigInteger;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -146,6 +145,16 @@ public class ProcedureServicePostgres
 			final String addr1,
 			final String addr2,
 			final String postalcode) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
+	}
+
+	@Override
+	public ProcedureResponse ecChangePassword(
+			final String charset,
+			final String recKey,
+			final String oldPassword,
+			final String newPassword) {
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}

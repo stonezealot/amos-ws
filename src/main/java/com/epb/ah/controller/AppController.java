@@ -1,11 +1,15 @@
 package com.epb.ah.controller;
 
 import java.math.BigDecimal;
+import java.security.MessageDigest;
 import java.time.format.DateTimeFormatter;
 
 import java.util.List;
 import java.util.Optional;
 
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
@@ -26,6 +30,7 @@ import com.epb.ah.bean.CartlineEditCashcarryPayload;
 import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
+import com.epb.ah.bean.CustomerChangePasswordPayload;
 import com.epb.ah.bean.CustomerUpdatePayload;
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Customer;
@@ -167,6 +172,29 @@ public class AppController {
 						payload.getAddr1(),
 						payload.getAddr2(),
 						payload.getPostalcode());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getCustomer(payload.getCustId(), payload.getOrgId());
+
+	}
+	
+	@PostMapping("/customer/{recKey}/change-password")
+	public ResponseEntity<List<Customer>> customerChangePassword(
+			@PathVariable final String recKey,
+			@RequestBody final CustomerChangePasswordPayload payload) {
+
+		final String oldPassword = this.toUserPwd(payload.getOldPassword());
+		final String newPassword = this.toUserPwd(payload.getNewPassword());
+		
+		final ProcedureResponse response = this.procedureService
+				.ecChangePassword(
+						"",
+						recKey,
+						oldPassword,
+						newPassword);
 
 		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
 			throw new RuntimeException(response.getErrMsg());
@@ -337,12 +365,40 @@ public class AppController {
 				new Object[] { recKey },
 				BeanPropertyRowMapper.newInstance(Ecstk.class));
 	}
+	
+	private String toUserPwd(final String password) {
+		try {
+			if (password == null) {
+				return null;
+			}
+
+			final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
+			final byte[] digests = messageDigest.digest(password.getBytes());
+
+			final StringBuilder stringBuilder = new StringBuilder();
+			for (int i = 0; i < digests.length; i++) {
+				int halfbyte = (digests[i] >>> 4) & 0x0F;
+				for (int j = 0; j <= 1; j++) {
+					stringBuilder.append(
+							((0 <= halfbyte) && (halfbyte <= 9))
+									? (char) ('0' + halfbyte)
+									: (char) ('a' + (halfbyte - 10)));
+					halfbyte = digests[i] & 0x0F;
+				}
+			}
+
+			return stringBuilder.toString();
+		} catch (final Throwable throwable) {
+			this.log.error("error converting password", throwable);
+			return null;
+		}
+	}
 
 	//
 	// fields
 	//
 
-//	private final Log log = LogFactory.getLog(AppController.class);
+	private final Log log = LogFactory.getLog(AppController.class);
 
 	private final JdbcTemplate jdbcTemplate;
 

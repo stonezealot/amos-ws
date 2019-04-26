@@ -31,6 +31,8 @@ public class Customer {
 	private String address2;
 	private String emailAddr;
 	private String remark;
+	private String phone;
+	private String postalcode;
 
 	public Customer() {
 		super();
@@ -210,6 +212,22 @@ public class Customer {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getPostalcode() {
+		return postalcode;
+	}
+
+	public void setPostalcode(String postalcode) {
+		this.postalcode = postalcode;
 	}
 
 }

@@ -97,6 +97,12 @@ public interface ProcedureService {
 			String addr1,
 			String addr2,
 			String postalcode);
+	
+	ProcedureResponse ecChangePassword(
+			String charset,
+			String recKey,
+			String oldPassword,
+			String newPassword);
 
 	static final String ERR_CODE_OK = "OK";
 }
