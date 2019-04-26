@@ -1,6 +1,5 @@
 package com.epb.ah.service;
 
-
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -155,6 +154,17 @@ public class ProcedureServicePostgres
 			final String recKey,
 			final String oldPassword,
 			final String newPassword) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
+	}
+
+	@Override
+	public ProcedureResponse ecAddBookmark(
+			final String charset,
+			final String orgId,
+			final String custId,
+			final String ecshopId,
+			final String stkId) {
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}

@@ -97,12 +97,19 @@ public interface ProcedureService {
 			String addr1,
 			String addr2,
 			String postalcode);
-	
+
 	ProcedureResponse ecChangePassword(
 			String charset,
 			String recKey,
 			String oldPassword,
 			String newPassword);
+
+	ProcedureResponse ecAddBookmark(
+			String charset,
+			String orgId,
+			String custId,
+			String ecshopId,
+			String stkId);
 
 	static final String ERR_CODE_OK = "OK";
 }

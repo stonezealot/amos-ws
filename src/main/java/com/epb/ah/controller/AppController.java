@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,7 @@ import com.epb.ah.bean.CustomerChangePasswordPayload;
 import com.epb.ah.bean.CustomerUpdatePayload;
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Customer;
+import com.epb.ah.entity.Ecbookmark;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
 import com.epb.ah.entity.EcskuOverviewPicture;
@@ -41,6 +41,7 @@ import com.epb.ah.entity.EcskuSpecPicture;
 import com.epb.ah.entity.Ecstk;
 import com.epb.ah.repository.EcstkRepository;
 import com.epb.ah.repository.CustomerRepository;
+import com.epb.ah.repository.EcbookmarkRepository;
 import com.epb.ah.repository.EccartRepository;
 import com.epb.ah.repository.EccartlineViewRepository;
 import com.epb.ah.repository.EcskuOverviewPictureRepository;
@@ -119,6 +120,17 @@ public class AppController {
 		return ResponseEntity.ok(eccartlineViews);
 	}
 
+	@GetMapping("/bookmarks")
+	public ResponseEntity<List<Ecbookmark>> getBookmarks(
+			@RequestParam final String custId,
+			@RequestParam final String ecshopId) {
+
+		final List<Ecbookmark> ecbookmarks = this.ecbookmarkRepository
+				.findByCustIdAndEcshopId(custId, ecshopId);
+
+		return ResponseEntity.ok(ecbookmarks);
+	}
+
 	@GetMapping("/overviews")
 	public ResponseEntity<List<EcskuOverviewPicture>> getOverviewPictures(
 			@RequestParam final String stkId,
@@ -180,7 +192,7 @@ public class AppController {
 		return this.getCustomer(payload.getCustId(), payload.getOrgId());
 
 	}
-	
+
 	@PostMapping("/customer/{recKey}/change-password")
 	public ResponseEntity<List<Customer>> customerChangePassword(
 			@PathVariable final String recKey,
@@ -188,7 +200,7 @@ public class AppController {
 
 		final String oldPassword = this.toUserPwd(payload.getOldPassword());
 		final String newPassword = this.toUserPwd(payload.getNewPassword());
-		
+
 		final ProcedureResponse response = this.procedureService
 				.ecChangePassword(
 						"",
@@ -365,7 +377,7 @@ public class AppController {
 				new Object[] { recKey },
 				BeanPropertyRowMapper.newInstance(Ecstk.class));
 	}
-	
+
 	private String toUserPwd(final String password) {
 		try {
 			if (password == null) {
@@ -408,6 +420,7 @@ public class AppController {
 	private final EccartlineViewRepository eccartlineViewRepository;
 	private final EcskuOverviewPictureRepository ecskuOverviewPictureRepository;
 	private final EcskuSpecPictureRepository ecskuSpecPictureRepository;
+	private final EcbookmarkRepository ecbookmarkRepository;
 
 	private final ProcedureService procedureService;
 
@@ -428,7 +441,8 @@ public class AppController {
 			final EccartRepository eccartRepository,
 			final EccartlineViewRepository eccartlineViewRepository,
 			final EcskuOverviewPictureRepository ecskuOverviewPictureRepository,
-			final EcskuSpecPictureRepository ecskuSpecPictureRepository) {
+			final EcskuSpecPictureRepository ecskuSpecPictureRepository,
+			final EcbookmarkRepository ecbookmarkRepository) {
 
 		super();
 
@@ -443,6 +457,7 @@ public class AppController {
 		this.eccartlineViewRepository = eccartlineViewRepository;
 		this.ecskuOverviewPictureRepository = ecskuOverviewPictureRepository;
 		this.ecskuSpecPictureRepository = ecskuSpecPictureRepository;
+		this.ecbookmarkRepository = ecbookmarkRepository;
 
 	}
 

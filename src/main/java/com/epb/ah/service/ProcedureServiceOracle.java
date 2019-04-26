@@ -365,6 +365,33 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
+	
+	@Override
+	public ProcedureResponse ecAddBookmark(
+			final String charset,
+			final String orgId,
+			final String custId,
+			final String ecshopId,
+			final String stkId) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_org_id", orgId)
+				.addValue("v_cust_id", custId)
+				.addValue("v_ecshop_id", ecshopId)
+				.addValue("v_stk_id", stkId);
+
+		final Map<String, Object> out = this.ecAddBookmarkCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponse response = new ProcedureResponse(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"));
+
+		return response;
+	}
 	//
 	// fields
 	//
@@ -382,6 +409,7 @@ public class ProcedureServiceOracle
 	private final SimpleJdbcCall ecDeleteCartCall;
 	private final SimpleJdbcCall eccustUpdateCall;
 	private final SimpleJdbcCall ecChangePasswordCall;
+	private final SimpleJdbcCall ecAddBookmarkCall;
 	
 
 	//
@@ -425,6 +453,9 @@ public class ProcedureServiceOracle
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("eccust_update");
 		this.ecChangePasswordCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("ec_change_password");
+		this.ecAddBookmarkCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("ec_change_password");
 	}
