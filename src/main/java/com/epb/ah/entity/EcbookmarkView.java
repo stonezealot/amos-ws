@@ -7,10 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Ecbookmark {
+public class EcbookmarkView {
 
 	@Id
 	private BigDecimal recKey;
+	private BigDecimal stkRecKey;
 	private String orgId;
 	private String custId;
 	private String ecshopId;
@@ -19,7 +20,7 @@ public class Ecbookmark {
 	private BigDecimal netPrice;
 	private Date createDate;
 
-	public Ecbookmark() {
+	public EcbookmarkView() {
 		super();
 	}
 
@@ -29,6 +30,14 @@ public class Ecbookmark {
 
 	public void setRecKey(BigDecimal recKey) {
 		this.recKey = recKey;
+	}
+
+	public BigDecimal getStkRecKey() {
+		return stkRecKey;
+	}
+
+	public void setStkRecKey(BigDecimal stkRecKey) {
+		this.stkRecKey = stkRecKey;
 	}
 
 	public String getOrgId() {

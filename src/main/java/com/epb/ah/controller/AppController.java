@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.epb.ah.bean.AddToCartPayload;
+import com.epb.ah.bean.BookmarkPayload;
 import com.epb.ah.bean.CartlineEditCashcarryPayload;
 import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
@@ -33,7 +34,7 @@ import com.epb.ah.bean.CustomerChangePasswordPayload;
 import com.epb.ah.bean.CustomerUpdatePayload;
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Customer;
-import com.epb.ah.entity.Ecbookmark;
+import com.epb.ah.entity.EcbookmarkView;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
 import com.epb.ah.entity.EcskuOverviewPicture;
@@ -121,14 +122,14 @@ public class AppController {
 	}
 
 	@GetMapping("/bookmarks")
-	public ResponseEntity<List<Ecbookmark>> getBookmarks(
+	public ResponseEntity<List<EcbookmarkView>> getBookmarks(
 			@RequestParam final String custId,
 			@RequestParam final String ecshopId) {
 
-		final List<Ecbookmark> ecbookmarks = this.ecbookmarkRepository
+		final List<EcbookmarkView> ecbookmarkViews = this.ecbookmarkRepository
 				.findByCustIdAndEcshopId(custId, ecshopId);
 
-		return ResponseEntity.ok(ecbookmarks);
+		return ResponseEntity.ok(ecbookmarkViews);
 	}
 
 	@GetMapping("/overviews")
@@ -364,6 +365,25 @@ public class AppController {
 		}
 
 		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
+	}
+
+	@PostMapping("add-bookmark")
+	public ResponseEntity<List<EcbookmarkView>> addBookmark(
+			@RequestBody final BookmarkPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecAddBookmark(
+						"",
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId(),
+						payload.getStkId());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getBookmarks(payload.getCustId(), payload.getEcshopId());
 	}
 
 	//

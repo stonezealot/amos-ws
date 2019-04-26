@@ -111,5 +111,12 @@ public interface ProcedureService {
 			String ecshopId,
 			String stkId);
 
+	ProcedureResponse ecDeleteBookmark(
+			String charset,
+			String orgId,
+			String custId,
+			String ecshopId,
+			String stkId);
+
 	static final String ERR_CODE_OK = "OK";
 }

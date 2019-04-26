@@ -10,6 +10,7 @@ public class EccartlineView {
 
 	@Id
 	private BigDecimal recKey;
+	private BigDecimal stkRecKey;
 	private String custId;
 	private String ecshopId;
 	private Character cashcarry;
@@ -41,6 +42,14 @@ public class EccartlineView {
 
 	public void setRecKey(BigDecimal recKey) {
 		this.recKey = recKey;
+	}
+
+	public BigDecimal getStkRecKey() {
+		return stkRecKey;
+	}
+
+	public void setStkRecKey(BigDecimal stkRecKey) {
+		this.stkRecKey = stkRecKey;
 	}
 
 	public String getCustId() {

@@ -168,4 +168,15 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
+
+	@Override
+	public ProcedureResponse ecDeleteBookmark(
+			final String charset,
+			final String orgId,
+			final String custId,
+			final String ecshopId,
+			final String stkId) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
+	}
 }

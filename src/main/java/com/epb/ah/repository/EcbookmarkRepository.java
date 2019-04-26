@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.epb.ah.entity.Ecbookmark;
+import com.epb.ah.entity.EcbookmarkView;
 
 public interface EcbookmarkRepository
-		extends JpaRepository<Ecbookmark, BigDecimal> {
+		extends JpaRepository<EcbookmarkView, BigDecimal> {
 
-	List<Ecbookmark> findByCustIdAndEcshopId(final String custId, final String ecshopId);
+	List<EcbookmarkView> findByCustIdAndEcshopId(final String custId, final String ecshopId);
 }
