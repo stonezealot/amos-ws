@@ -386,6 +386,24 @@ public class AppController {
 		return this.getBookmarks(payload.getCustId(), payload.getEcshopId());
 	}
 
+	@PostMapping("delete-bookmark")
+	public ResponseEntity<List<EcbookmarkView>> deleteBookmark(
+			@RequestBody final BookmarkPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecDeleteBookmark(
+						"",
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId(),
+						payload.getStkId());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getBookmarks(payload.getCustId(), payload.getEcshopId());
+	}
 	//
 	// private methods
 	//
