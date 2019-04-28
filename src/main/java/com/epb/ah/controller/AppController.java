@@ -30,6 +30,7 @@ import com.epb.ah.bean.CartlineEditCashcarryPayload;
 import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
+import com.epb.ah.bean.CheckoutPayload;
 import com.epb.ah.bean.CustomerChangePasswordPayload;
 import com.epb.ah.bean.CustomerUpdatePayload;
 import com.epb.ah.bean.EcstkInfo;
@@ -403,6 +404,24 @@ public class AppController {
 		}
 
 		return this.getBookmarks(payload.getCustId(), payload.getEcshopId());
+	}
+	
+	@PostMapping("checkout")
+	public ResponseEntity<List<Eccart>> checkout(
+			@RequestBody final CheckoutPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecCartCheckout(
+						"",
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccarts(payload.getCustId(), payload.getEcshopId());
 	}
 	//
 	// private methods

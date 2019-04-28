@@ -118,5 +118,11 @@ public interface ProcedureService {
 			String ecshopId,
 			String stkId);
 
+	ProcedureResponse ecCartCheckout(
+			String charset,
+			String orgId,
+			String custId,
+			String ecshopId);
+
 	static final String ERR_CODE_OK = "OK";
 }
