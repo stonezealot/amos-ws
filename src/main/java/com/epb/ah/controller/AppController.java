@@ -45,9 +45,11 @@ import com.epb.ah.entity.Ecstk;
 import com.epb.ah.entity.Ewallet;
 import com.epb.ah.entity.EwalletDtl;
 import com.epb.ah.entity.Ppcard;
+import com.epb.ah.entity.PpcardLog;
 import com.epb.ah.repository.EcstkRepository;
 import com.epb.ah.repository.EwalletDtlRepository;
 import com.epb.ah.repository.EwalletRepository;
+import com.epb.ah.repository.PpcardLogRepository;
 import com.epb.ah.repository.PpcardRepository;
 import com.epb.ah.repository.CustomerRepository;
 import com.epb.ah.repository.EcbookmarkRepository;
@@ -221,6 +223,17 @@ public class AppController {
 				.findByPpIdAndOrgId(custId, orgId);
 
 		return ResponseEntity.ok(ppcards);
+	}
+
+	@GetMapping("/credit-details")
+	public ResponseEntity<List<PpcardLog>> getCreditDtls(
+			@RequestParam final String custId,
+			@RequestParam final String orgId) {
+
+		final List<PpcardLog> ppcardLogs = this.ppcardLogRepository
+				.findByPpIdAndOrgIdOrderBySrcDocDateDesc(custId, orgId);
+
+		return ResponseEntity.ok(ppcardLogs);
 	}
 
 	@PostMapping("/customer/{recKey}/update")
@@ -534,6 +547,7 @@ public class AppController {
 	private final EwalletRepository ewalletRepository;
 	private final EwalletDtlRepository ewalletDtlRepository;
 	private final PpcardRepository ppcardRepository;
+	private final PpcardLogRepository ppcardLogRepository;
 
 	private final ProcedureService procedureService;
 
@@ -559,7 +573,8 @@ public class AppController {
 			final EcordermasRepository ecordermasRepository,
 			final EwalletRepository ewalletRepository,
 			final EwalletDtlRepository ewalletDtlRepository,
-			final PpcardRepository ppcardRepository) {
+			final PpcardRepository ppcardRepository,
+			final PpcardLogRepository ppcardLogRepository) {
 
 		super();
 
@@ -579,6 +594,7 @@ public class AppController {
 		this.ewalletRepository = ewalletRepository;
 		this.ewalletDtlRepository = ewalletDtlRepository;
 		this.ppcardRepository = ppcardRepository;
+		this.ppcardLogRepository = ppcardLogRepository;
 
 	}
 
