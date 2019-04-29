@@ -43,7 +43,9 @@ import com.epb.ah.entity.EcskuOverviewPicture;
 import com.epb.ah.entity.EcskuSpecPicture;
 import com.epb.ah.entity.Ecstk;
 import com.epb.ah.entity.Ewallet;
+import com.epb.ah.entity.EwalletDtl;
 import com.epb.ah.repository.EcstkRepository;
+import com.epb.ah.repository.EwalletDtlRepository;
 import com.epb.ah.repository.EwalletRepository;
 import com.epb.ah.repository.CustomerRepository;
 import com.epb.ah.repository.EcbookmarkRepository;
@@ -195,6 +197,17 @@ public class AppController {
 				.findByOrgIdAndCustId(orgId, custId);
 
 		return ResponseEntity.ok(ewallets);
+	}
+
+	@GetMapping("/ewallet-details")
+	public ResponseEntity<List<EwalletDtl>> getEwalletDtls(
+			@RequestParam final String custId,
+			@RequestParam final String orgId) {
+
+		final List<EwalletDtl> ewalletDtls = this.ewalletDtlRepository
+				.findByCustIdAndOrgIdOrderBySrcDocDateDesc(custId, orgId);
+
+		return ResponseEntity.ok(ewalletDtls);
 	}
 
 	@PostMapping("/customer/{recKey}/update")
@@ -506,6 +519,7 @@ public class AppController {
 	private final EcbookmarkRepository ecbookmarkRepository;
 	private final EcordermasRepository ecordermasRepository;
 	private final EwalletRepository ewalletRepository;
+	private final EwalletDtlRepository ewalletDtlRepository;
 
 	private final ProcedureService procedureService;
 
@@ -529,7 +543,8 @@ public class AppController {
 			final EcskuSpecPictureRepository ecskuSpecPictureRepository,
 			final EcbookmarkRepository ecbookmarkRepository,
 			final EcordermasRepository ecordermasRepository,
-			final EwalletRepository ewalletRepository) {
+			final EwalletRepository ewalletRepository,
+			final EwalletDtlRepository ewalletDtlRepository) {
 
 		super();
 
@@ -547,6 +562,7 @@ public class AppController {
 		this.ecbookmarkRepository = ecbookmarkRepository;
 		this.ecordermasRepository = ecordermasRepository;
 		this.ewalletRepository = ewalletRepository;
+		this.ewalletDtlRepository = ewalletDtlRepository;
 
 	}
 
