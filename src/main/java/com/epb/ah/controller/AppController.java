@@ -42,7 +42,9 @@ import com.epb.ah.entity.Ecordermas;
 import com.epb.ah.entity.EcskuOverviewPicture;
 import com.epb.ah.entity.EcskuSpecPicture;
 import com.epb.ah.entity.Ecstk;
+import com.epb.ah.entity.Ewallet;
 import com.epb.ah.repository.EcstkRepository;
+import com.epb.ah.repository.EwalletRepository;
 import com.epb.ah.repository.CustomerRepository;
 import com.epb.ah.repository.EcbookmarkRepository;
 import com.epb.ah.repository.EccartRepository;
@@ -172,7 +174,7 @@ public class AppController {
 
 		return ResponseEntity.ok(ecskuSpecPictures);
 	}
-	
+
 	@GetMapping("/orders")
 	public ResponseEntity<List<Ecordermas>> getOrders(
 			@RequestParam final String custId,
@@ -180,10 +182,20 @@ public class AppController {
 
 		final List<Ecordermas> ecordermases = this.ecordermasRepository
 				.findByVipIdAndEcshopIdOrderByRecKeyDesc(custId, ecshopId);
-		
+
 		return ResponseEntity.ok(ecordermases);
 	}
-	
+
+	@GetMapping("/ewallets")
+	public ResponseEntity<List<Ewallet>> getEwallets(
+			@RequestParam final String orgId,
+			@RequestParam final String custId) {
+
+		final List<Ewallet> ewallets = this.ewalletRepository
+				.findByOrgIdAndCustId(orgId, custId);
+
+		return ResponseEntity.ok(ewallets);
+	}
 
 	@PostMapping("/customer/{recKey}/update")
 	public ResponseEntity<List<Customer>> customerUpdate(
@@ -419,7 +431,7 @@ public class AppController {
 
 		return this.getBookmarks(payload.getCustId(), payload.getEcshopId());
 	}
-	
+
 	@PostMapping("checkout")
 	public ResponseEntity<List<Eccart>> checkout(
 			@RequestBody final CheckoutPayload payload) {
@@ -493,6 +505,7 @@ public class AppController {
 	private final EcskuSpecPictureRepository ecskuSpecPictureRepository;
 	private final EcbookmarkRepository ecbookmarkRepository;
 	private final EcordermasRepository ecordermasRepository;
+	private final EwalletRepository ewalletRepository;
 
 	private final ProcedureService procedureService;
 
@@ -515,7 +528,8 @@ public class AppController {
 			final EcskuOverviewPictureRepository ecskuOverviewPictureRepository,
 			final EcskuSpecPictureRepository ecskuSpecPictureRepository,
 			final EcbookmarkRepository ecbookmarkRepository,
-			final EcordermasRepository ecordermasRepository) {
+			final EcordermasRepository ecordermasRepository,
+			final EwalletRepository ewalletRepository) {
 
 		super();
 
@@ -532,6 +546,7 @@ public class AppController {
 		this.ecskuSpecPictureRepository = ecskuSpecPictureRepository;
 		this.ecbookmarkRepository = ecbookmarkRepository;
 		this.ecordermasRepository = ecordermasRepository;
+		this.ewalletRepository = ewalletRepository;
 
 	}
 
