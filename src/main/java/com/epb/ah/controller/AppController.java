@@ -35,6 +35,7 @@ import com.epb.ah.bean.CustomerChangePasswordPayload;
 import com.epb.ah.bean.CustomerUpdatePayload;
 import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Customer;
+import com.epb.ah.entity.EcDeliveryTimeslot;
 import com.epb.ah.entity.EcbookmarkView;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
@@ -52,6 +53,7 @@ import com.epb.ah.repository.EwalletRepository;
 import com.epb.ah.repository.PpcardLogRepository;
 import com.epb.ah.repository.PpcardRepository;
 import com.epb.ah.repository.CustomerRepository;
+import com.epb.ah.repository.EcDeliveryTimeslotRepository;
 import com.epb.ah.repository.EcbookmarkRepository;
 import com.epb.ah.repository.EccartRepository;
 import com.epb.ah.repository.EccartlineViewRepository;
@@ -236,6 +238,23 @@ public class AppController {
 		return ResponseEntity.ok(ppcardLogs);
 	}
 
+	@GetMapping("/timeslots")
+	public ResponseEntity<List<EcDeliveryTimeslot>> getDeliveryTimeslots(
+			@RequestParam final String orgId,
+			@RequestParam final String dlyZoneId) {
+
+		final EcDeliveryTimeslot probe = new EcDeliveryTimeslot();
+		probe.setOrgId(orgId);
+		probe.setDlyZoneId(dlyZoneId);
+
+		final List<EcDeliveryTimeslot> ecDeliveryTimeslots = this.ecDeliveryTimeslotRepository
+				.findAll(
+						Example.of(probe),
+						Sort.by("dlyDate", "timeslotId"));
+
+		return ResponseEntity.ok(ecDeliveryTimeslots);
+	}
+
 	@PostMapping("/customer/{recKey}/update")
 	public ResponseEntity<List<Customer>> customerUpdate(
 			@PathVariable final String recKey,
@@ -410,7 +429,7 @@ public class AppController {
 
 	}
 
-	@PostMapping("add-to-cart")
+	@PostMapping("/add-to-cart")
 	public ResponseEntity<List<EccartlineView>> addToCart(
 			@RequestBody final AddToCartPayload payload) {
 
@@ -433,7 +452,7 @@ public class AppController {
 		return this.getEccartlines(payload.getCustId(), payload.getEcshopId());
 	}
 
-	@PostMapping("add-bookmark")
+	@PostMapping("/add-bookmark")
 	public ResponseEntity<List<EcbookmarkView>> addBookmark(
 			@RequestBody final BookmarkPayload payload) {
 
@@ -452,7 +471,7 @@ public class AppController {
 		return this.getBookmarks(payload.getCustId(), payload.getEcshopId());
 	}
 
-	@PostMapping("delete-bookmark")
+	@PostMapping("/delete-bookmark")
 	public ResponseEntity<List<EcbookmarkView>> deleteBookmark(
 			@RequestBody final BookmarkPayload payload) {
 
@@ -471,7 +490,7 @@ public class AppController {
 		return this.getBookmarks(payload.getCustId(), payload.getEcshopId());
 	}
 
-	@PostMapping("checkout")
+	@PostMapping("/checkout")
 	public ResponseEntity<List<Eccart>> checkout(
 			@RequestBody final CommonPayload payload) {
 
@@ -489,7 +508,7 @@ public class AppController {
 		return this.getEccarts(payload.getCustId(), payload.getEcshopId());
 	}
 
-	@PostMapping("recalculate")
+	@PostMapping("/recalculate")
 	public ResponseEntity<List<Eccart>> recalculate(
 			@RequestBody final CommonPayload payload) {
 
@@ -566,6 +585,7 @@ public class AppController {
 	private final EwalletDtlRepository ewalletDtlRepository;
 	private final PpcardRepository ppcardRepository;
 	private final PpcardLogRepository ppcardLogRepository;
+	private final EcDeliveryTimeslotRepository ecDeliveryTimeslotRepository;
 
 	private final ProcedureService procedureService;
 
@@ -592,7 +612,8 @@ public class AppController {
 			final EwalletRepository ewalletRepository,
 			final EwalletDtlRepository ewalletDtlRepository,
 			final PpcardRepository ppcardRepository,
-			final PpcardLogRepository ppcardLogRepository) {
+			final PpcardLogRepository ppcardLogRepository,
+			final EcDeliveryTimeslotRepository ecDeliveryTimeslotRepository) {
 
 		super();
 
@@ -613,6 +634,7 @@ public class AppController {
 		this.ewalletDtlRepository = ewalletDtlRepository;
 		this.ppcardRepository = ppcardRepository;
 		this.ppcardLogRepository = ppcardLogRepository;
+		this.ecDeliveryTimeslotRepository = ecDeliveryTimeslotRepository;
 
 	}
 
