@@ -124,5 +124,11 @@ public interface ProcedureService {
 			String custId,
 			String ecshopId);
 
+	ProcedureResponse ecCartRecalculate(
+			String charset,
+			String orgId,
+			String custId,
+			String ecshopId);
+
 	static final String ERR_CODE_OK = "OK";
 }

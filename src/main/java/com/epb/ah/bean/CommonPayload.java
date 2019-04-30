@@ -1,12 +1,12 @@
 package com.epb.ah.bean;
 
-public class CheckoutPayload {
+public class CommonPayload {
 
 	private String orgId;
 	private String custId;
 	private String ecshopId;
 
-	public CheckoutPayload() {
+	public CommonPayload() {
 		super();
 	}
 
