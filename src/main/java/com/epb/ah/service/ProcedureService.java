@@ -130,5 +130,18 @@ public interface ProcedureService {
 			String custId,
 			String ecshopId);
 
+	ProcedureResponse ecCheckoutDeliveryAction(
+			String charset,
+			String orgId,
+			String custId,
+			String ecshopId,
+			String dlyZoneId,
+			String dlyDate,
+			String timeslotId,
+			String addr1,
+			String addr2,
+			String postalcode,
+			String remark);
+
 	static final String ERR_CODE_OK = "OK";
 }

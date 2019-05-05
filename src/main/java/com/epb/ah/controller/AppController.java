@@ -30,6 +30,7 @@ import com.epb.ah.bean.CartlineEditCashcarryPayload;
 import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
+import com.epb.ah.bean.CheckoutDeliveryPayload;
 import com.epb.ah.bean.CommonPayload;
 import com.epb.ah.bean.CustomerChangePasswordPayload;
 import com.epb.ah.bean.CustomerUpdatePayload;
@@ -518,6 +519,31 @@ public class AppController {
 						payload.getOrgId(),
 						payload.getCustId(),
 						payload.getEcshopId());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccarts(payload.getCustId(), payload.getEcshopId());
+	}
+
+	@PostMapping("/checkout-delivery")
+	public ResponseEntity<List<Eccart>> checkoutDelivery(
+			@RequestBody final CheckoutDeliveryPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecCheckoutDeliveryAction(
+						"",
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId(),
+						payload.getDlyZoneId(),
+						payload.getDlyDate(),
+						payload.getTimeslotId(),
+						payload.getAddr1(),
+						payload.getAddr2(),
+						payload.getPostalcode(),
+						payload.getRemark());
 
 		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
 			throw new RuntimeException(response.getErrMsg());

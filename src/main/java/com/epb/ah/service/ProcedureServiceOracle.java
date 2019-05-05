@@ -125,7 +125,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecEditCartDec(
 			final String charset,
@@ -152,7 +152,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecEditCartQty(
 			final String charset,
@@ -183,7 +183,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecEditCartInstallation(
 			final String charset,
@@ -214,7 +214,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecEditCartCashcarry(
 			final String charset,
@@ -245,7 +245,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecAddCart(
 			final String charset,
@@ -280,7 +280,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecDeleteCart(
 			final String charset,
@@ -307,7 +307,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse eccustUpdate(
 			final String charset,
@@ -340,7 +340,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecChangePassword(
 			final String charset,
@@ -365,7 +365,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecAddBookmark(
 			final String charset,
@@ -392,7 +392,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecDeleteBookmark(
 			final String charset,
@@ -419,7 +419,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecCartCheckout(
 			final String charset,
@@ -444,7 +444,7 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
-	
+
 	@Override
 	public ProcedureResponse ecCartRecalculate(
 			final String charset,
@@ -459,6 +459,45 @@ public class ProcedureServiceOracle
 				.addValue("v_ecshop_id", ecshopId);
 
 		final Map<String, Object> out = this.ecCartRecalculateCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponse response = new ProcedureResponse(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"));
+
+		return response;
+	}
+
+	@Override
+	public ProcedureResponse ecCheckoutDeliveryAction(
+			final String charset,
+			final String orgId,
+			final String custId,
+			final String ecshopId,
+			final String dlyZoneId,
+			final String dlyDate,
+			final String timeslotId,
+			final String addr1,
+			final String addr2,
+			final String postalcode,
+			final String remark) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_org_id", orgId)
+				.addValue("v_cust_id", custId)
+				.addValue("v_ecshop_id", ecshopId)
+				.addValue("v_dly_zone_id", dlyZoneId)
+				.addValue("v_dly_date", dlyDate)
+				.addValue("v_timeslot_id", timeslotId)
+				.addValue("v_addr1", addr1)
+				.addValue("v_addr2", addr2)
+				.addValue("v_postalcode", postalcode)
+				.addValue("v_remark", remark);
+
+		final Map<String, Object> out = this.ecCheckoutDeliveryActionCall.execute(in);
 		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
 			throw new RuntimeException((String) out.get("v_err_msg"));
 		}
@@ -490,7 +529,7 @@ public class ProcedureServiceOracle
 	private final SimpleJdbcCall ecDeleteBookmarkCall;
 	private final SimpleJdbcCall ecCartCheckoutCall;
 	private final SimpleJdbcCall ecCartRecalculateCall;
-	
+	private final SimpleJdbcCall ecCheckoutDeliveryActionCall;
 
 	//
 	// constructor
@@ -547,7 +586,9 @@ public class ProcedureServiceOracle
 		this.ecCartRecalculateCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("ec_cart_recalculate");
+		this.ecCheckoutDeliveryActionCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("ec_checkout_delivery_action");
 	}
-	
 
 }
