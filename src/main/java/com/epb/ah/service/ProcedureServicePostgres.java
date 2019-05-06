@@ -216,4 +216,19 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
+
+	@Override
+	public ProcedureResponse ecCheckoutBillingAction(
+			final String charset,
+			final String orgId,
+			final String custId,
+			final String ecshopId,
+			final String addressFlg,
+			final String addr1,
+			final String addr2,
+			final String postalcode,
+			final String ewalletRedeem) {
+
+		return new ProcedureResponse(ERR_CODE_OK, "");
+	}
 }

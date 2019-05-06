@@ -30,6 +30,7 @@ import com.epb.ah.bean.CartlineEditCashcarryPayload;
 import com.epb.ah.bean.CartlineEditInstallationPayload;
 import com.epb.ah.bean.CartlineEditQtyPayload;
 import com.epb.ah.bean.CartlineQtyPayload;
+import com.epb.ah.bean.CheckoutBillingPayload;
 import com.epb.ah.bean.CheckoutDeliveryPayload;
 import com.epb.ah.bean.CommonPayload;
 import com.epb.ah.bean.CustomerChangePasswordPayload;
@@ -544,6 +545,29 @@ public class AppController {
 						payload.getAddr2(),
 						payload.getPostalcode(),
 						payload.getRemark());
+
+		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
+			throw new RuntimeException(response.getErrMsg());
+		}
+
+		return this.getEccarts(payload.getCustId(), payload.getEcshopId());
+	}
+
+	@PostMapping("/checkout-billing")
+	public ResponseEntity<List<Eccart>> checkoutBilling(
+			@RequestBody final CheckoutBillingPayload payload) {
+
+		final ProcedureResponse response = this.procedureService
+				.ecCheckoutBillingAction(
+						"",
+						payload.getOrgId(),
+						payload.getCustId(),
+						payload.getEcshopId(),
+						payload.getAddressFlg(),
+						payload.getAddr1(),
+						payload.getAddr2(),
+						payload.getPostalcode(),
+						payload.getEwalletRedeem());
 
 		if (!ProcedureService.ERR_CODE_OK.equals(response.getErrCode())) {
 			throw new RuntimeException(response.getErrMsg());

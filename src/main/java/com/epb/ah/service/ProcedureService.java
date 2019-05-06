@@ -143,5 +143,16 @@ public interface ProcedureService {
 			String postalcode,
 			String remark);
 
+	ProcedureResponse ecCheckoutBillingAction(
+			String charset,
+			String orgId,
+			String custId,
+			String ecshopId,
+			String addressFlg,
+			String addr1,
+			String addr2,
+			String postalcode,
+			String ewalletRedeem);
+
 	static final String ERR_CODE_OK = "OK";
 }
