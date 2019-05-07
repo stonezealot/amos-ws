@@ -231,4 +231,14 @@ public class ProcedureServicePostgres
 
 		return new ProcedureResponse(ERR_CODE_OK, "");
 	}
+
+	@Override
+	public ProcedureResponseWithOrderDocId ecGenerateOrder(
+			final String charset,
+			final String orgId,
+			final String custId,
+			final String ecshopId) {
+
+		return new ProcedureResponseWithOrderDocId(ERR_CODE_OK, "");
+	}
 }

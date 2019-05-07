@@ -153,6 +153,13 @@ public interface ProcedureService {
 			String addr2,
 			String postalcode,
 			String ewalletRedeem);
+	
+	ProcedureResponseWithOrderDocId ecGenerateOrder(
+			String charset,
+			String orgId,
+			String custId,
+			String ecshopId);
+	
 
 	static final String ERR_CODE_OK = "OK";
 }

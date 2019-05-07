@@ -41,6 +41,7 @@ import com.epb.ah.entity.EcDeliveryTimeslot;
 import com.epb.ah.entity.EcbookmarkView;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
+import com.epb.ah.entity.Eccat;
 import com.epb.ah.entity.Ecordermas;
 import com.epb.ah.entity.EcskuOverviewPicture;
 import com.epb.ah.entity.EcskuSpecPicture;
@@ -59,6 +60,7 @@ import com.epb.ah.repository.EcDeliveryTimeslotRepository;
 import com.epb.ah.repository.EcbookmarkRepository;
 import com.epb.ah.repository.EccartRepository;
 import com.epb.ah.repository.EccartlineViewRepository;
+import com.epb.ah.repository.EccatRepository;
 import com.epb.ah.repository.EcordermasRepository;
 import com.epb.ah.repository.EcskuOverviewPictureRepository;
 import com.epb.ah.repository.EcskuSpecPictureRepository;
@@ -86,6 +88,16 @@ public class AppController {
 						Example.of(probe),
 						Sort.by("stkId"));
 		return ResponseEntity.ok(ecstks);
+	}
+
+	@GetMapping("/categorys")
+	public ResponseEntity<List<Eccat>> getCategorys(
+			@RequestParam final String orgId) {
+
+		final List<Eccat> eccats = this.eccatRepository
+				.findByOrgIdOrderBySortNum(orgId);
+
+		return ResponseEntity.ok(eccats);
 	}
 
 	@GetMapping("/stocks/{recKey}")
@@ -625,6 +637,7 @@ public class AppController {
 
 	private final CustomerRepository customerRepository;
 	private final EcstkRepository ecstkRepository;
+	private final EccatRepository eccatRepository;
 	private final EccartRepository eccartRepository;
 	private final EccartlineViewRepository eccartlineViewRepository;
 	private final EcskuOverviewPictureRepository ecskuOverviewPictureRepository;
@@ -653,6 +666,7 @@ public class AppController {
 			final ProcedureService procedureService,
 			final CustomerRepository customerRepository,
 			final EcstkRepository ecstkRepository,
+			final EccatRepository eccatRepository,
 			final EccartRepository eccartRepository,
 			final EccartlineViewRepository eccartlineViewRepository,
 			final EcskuOverviewPictureRepository ecskuOverviewPictureRepository,
@@ -674,6 +688,7 @@ public class AppController {
 
 		this.customerRepository = customerRepository;
 		this.ecstkRepository = ecstkRepository;
+		this.eccatRepository = eccatRepository;
 		this.eccartRepository = eccartRepository;
 		this.eccartlineViewRepository = eccartlineViewRepository;
 		this.ecskuOverviewPictureRepository = ecskuOverviewPictureRepository;

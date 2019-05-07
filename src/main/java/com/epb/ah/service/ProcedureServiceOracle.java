@@ -543,6 +543,33 @@ public class ProcedureServiceOracle
 
 		return response;
 	}
+
+	@Override
+	public ProcedureResponseWithOrderDocId ecGenerateOrder(
+			final String charset,
+			final String orgId,
+			final String custId,
+			final String ecshopId) {
+
+		final SqlParameterSource in = new MapSqlParameterSource()
+				.addValue("v_charset", "")
+				.addValue("v_org_id", orgId)
+				.addValue("v_cust_id", custId)
+				.addValue("v_ecshop_id", ecshopId);
+
+		final Map<String, Object> out = this.ecGenerateOrderCall.execute(in);
+		if (!ERR_CODE_OK.equals((String) out.get("v_err_code"))) {
+			throw new RuntimeException((String) out.get("v_err_msg"));
+		}
+
+		final ProcedureResponseWithOrderDocId response = new ProcedureResponseWithOrderDocId(
+				(String) out.get("v_err_code"),
+				(String) out.get("v_err_msg"),
+				(String) out.get("v_order_doc_id"),
+				(String) out.get("v_order_rec_key"));
+
+		return response;
+	}
 	//
 	// fields
 	//
@@ -566,6 +593,7 @@ public class ProcedureServiceOracle
 	private final SimpleJdbcCall ecCartRecalculateCall;
 	private final SimpleJdbcCall ecCheckoutDeliveryActionCall;
 	private final SimpleJdbcCall ecCheckoutBillingActionCall;
+	private final SimpleJdbcCall ecGenerateOrderCall;
 
 	//
 	// constructor
@@ -628,6 +656,9 @@ public class ProcedureServiceOracle
 		this.ecCheckoutBillingActionCall = new SimpleJdbcCall(this.jdbcTemplate)
 				.withCatalogName("ep_ecutl")
 				.withProcedureName("ec_checkout_billing_action");
+		this.ecGenerateOrderCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withCatalogName("ep_ecutl")
+				.withProcedureName("ec_generate_order");
 	}
 
 }
