@@ -39,6 +39,7 @@ import com.epb.ah.bean.EcstkInfo;
 import com.epb.ah.entity.Customer;
 import com.epb.ah.entity.EcDeliveryTimeslot;
 import com.epb.ah.entity.Ecbanner;
+import com.epb.ah.entity.Ecbest;
 import com.epb.ah.entity.EcbookmarkView;
 import com.epb.ah.entity.Eccart;
 import com.epb.ah.entity.EccartlineView;
@@ -59,6 +60,7 @@ import com.epb.ah.repository.PpcardRepository;
 import com.epb.ah.repository.CustomerRepository;
 import com.epb.ah.repository.EcDeliveryTimeslotRepository;
 import com.epb.ah.repository.EcbannerRepository;
+import com.epb.ah.repository.EcbestRepository;
 import com.epb.ah.repository.EcbookmarkRepository;
 import com.epb.ah.repository.EccartRepository;
 import com.epb.ah.repository.EccartlineViewRepository;
@@ -66,7 +68,6 @@ import com.epb.ah.repository.EccatRepository;
 import com.epb.ah.repository.EcordermasRepository;
 import com.epb.ah.repository.EcskuOverviewPictureRepository;
 import com.epb.ah.repository.EcskuSpecPictureRepository;
-import com.epb.ah.repository.EcstkByCategoryRepository;
 import com.epb.ah.service.ProcedureResponse;
 import com.epb.ah.service.ProcedureService;
 
@@ -101,17 +102,6 @@ public class AppController {
 				.findByOrgIdOrderBySortNum(orgId);
 
 		return ResponseEntity.ok(eccats);
-	}
-
-	@GetMapping("/stocks-by-category")
-	public ResponseEntity<List<Ecstk>> getEcstksByCategory(
-			@RequestParam final String orgId,
-			@RequestParam final String eccatId) {
-
-		final List<Ecstk> ecstks = this.ecstkByCategoryRepository
-				.findByOrgIdAndEccatId(orgId, eccatId);
-
-		return ResponseEntity.ok(ecstks);
 	}
 
 	@GetMapping("/stocks/{recKey}")
@@ -291,6 +281,17 @@ public class AppController {
 				.findByOrgIdOrderByBannerId(orgId);
 
 		return ResponseEntity.ok(ecbanners);
+	}
+	
+	@GetMapping("/bests")
+	public ResponseEntity<List<Ecbest>> getEcbests(
+			@RequestParam final Character statusFlg,
+			@RequestParam final String orgId) {
+
+		final List<Ecbest> Ecbests = this.ecbestRepository
+				.findByStatusFlgAndOrgId(statusFlg, orgId);
+
+		return ResponseEntity.ok(Ecbests);
 	}
 
 	@PostMapping("/customer/{recKey}/update")
@@ -661,7 +662,6 @@ public class AppController {
 
 	private final CustomerRepository customerRepository;
 	private final EcstkRepository ecstkRepository;
-	private final EcstkByCategoryRepository ecstkByCategoryRepository;
 	private final EccatRepository eccatRepository;
 	private final EccartRepository eccartRepository;
 	private final EccartlineViewRepository eccartlineViewRepository;
@@ -675,6 +675,7 @@ public class AppController {
 	private final PpcardLogRepository ppcardLogRepository;
 	private final EcDeliveryTimeslotRepository ecDeliveryTimeslotRepository;
 	private final EcbannerRepository ecbannerRepository;
+	private final EcbestRepository ecbestRepository;
 
 	private final ProcedureService procedureService;
 
@@ -692,7 +693,6 @@ public class AppController {
 			final ProcedureService procedureService,
 			final CustomerRepository customerRepository,
 			final EcstkRepository ecstkRepository,
-			final EcstkByCategoryRepository ecstkByCategoryRepository,
 			final EccatRepository eccatRepository,
 			final EccartRepository eccartRepository,
 			final EccartlineViewRepository eccartlineViewRepository,
@@ -705,7 +705,8 @@ public class AppController {
 			final PpcardRepository ppcardRepository,
 			final PpcardLogRepository ppcardLogRepository,
 			final EcDeliveryTimeslotRepository ecDeliveryTimeslotRepository,
-			final EcbannerRepository ecbannerRepository) {
+			final EcbannerRepository ecbannerRepository,
+			final EcbestRepository ecbestRepository) {
 
 		super();
 
@@ -716,7 +717,6 @@ public class AppController {
 
 		this.customerRepository = customerRepository;
 		this.ecstkRepository = ecstkRepository;
-		this.ecstkByCategoryRepository = ecstkByCategoryRepository;
 		this.eccatRepository = eccatRepository;
 		this.eccartRepository = eccartRepository;
 		this.eccartlineViewRepository = eccartlineViewRepository;
@@ -730,6 +730,7 @@ public class AppController {
 		this.ppcardLogRepository = ppcardLogRepository;
 		this.ecDeliveryTimeslotRepository = ecDeliveryTimeslotRepository;
 		this.ecbannerRepository = ecbannerRepository;
+		this.ecbestRepository = ecbestRepository;
 
 	}
 
