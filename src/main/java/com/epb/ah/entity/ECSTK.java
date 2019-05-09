@@ -27,6 +27,8 @@ public class Ecstk {
 	private BigDecimal ewallet;
 	private String cat6_id;
 	private String cat6_name;
+	private String eccatId;
+	private String eccatName;
 
 	public Ecstk() {
 		super();
@@ -176,4 +178,21 @@ public class Ecstk {
 		this.cat6_name = cat6_name;
 	}
 
+	public String getEccatId() {
+		return eccatId;
+	}
+
+	public void setEccatId(String eccatId) {
+		this.eccatId = eccatId;
+	}
+
+	public String getEccatName() {
+		return eccatName;
+	}
+
+	public void setEccatName(String eccatName) {
+		this.eccatName = eccatName;
+	}
+
+	
 }
