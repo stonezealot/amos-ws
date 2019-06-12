@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class MlmasView {
+public class MlmasDespatchView {
 
 	@Id
 	private BigDecimal recKey;
@@ -52,12 +52,12 @@ public class MlmasView {
 	private String suppId;
 	private String suppName;
 	private BigDecimal mldRecKey;
+	private String dimension;
 	private String mlBarcode;
 	private BigDecimal mlbarcodeRecKey;
 	private String mlbarcodeRef1;
-	private String dimension;
 
-	public MlmasView() {
+	public MlmasDespatchView() {
 		super();
 	}
 
@@ -389,28 +389,12 @@ public class MlmasView {
 		this.suppName = suppName;
 	}
 
-	public BigDecimal getMlbarcodeRecKey() {
-		return mlbarcodeRecKey;
+	public BigDecimal getMldRecKey() {
+		return mldRecKey;
 	}
 
-	public void setMlbarcodeRecKey(BigDecimal mlbarcodeRecKey) {
-		this.mlbarcodeRecKey = mlbarcodeRecKey;
-	}
-
-	public String getMlBarcode() {
-		return mlBarcode;
-	}
-
-	public void setMlBarcode(String mlBarcode) {
-		this.mlBarcode = mlBarcode;
-	}
-
-	public String getMlbarcodeRef1() {
-		return mlbarcodeRef1;
-	}
-
-	public void setMlbarcodeRef1(String mlbarcodeRef1) {
-		this.mlbarcodeRef1 = mlbarcodeRef1;
+	public void setMldRecKey(BigDecimal mldRecKey) {
+		this.mldRecKey = mldRecKey;
 	}
 
 	public String getDimension() {
@@ -421,12 +405,28 @@ public class MlmasView {
 		this.dimension = dimension;
 	}
 
-	public BigDecimal getMldRecKey() {
-		return mldRecKey;
+	public String getMlBarcode() {
+		return mlBarcode;
 	}
 
-	public void setMldRecKey(BigDecimal mldRecKey) {
-		this.mldRecKey = mldRecKey;
+	public void setMlBarcode(String mlBarcode) {
+		this.mlBarcode = mlBarcode;
+	}
+
+	public BigDecimal getMlbarcodeRecKey() {
+		return mlbarcodeRecKey;
+	}
+
+	public void setMlbarcodeRecKey(BigDecimal mlbarcodeRecKey) {
+		this.mlbarcodeRecKey = mlbarcodeRecKey;
+	}
+
+	public String getMlbarcodeRef1() {
+		return mlbarcodeRef1;
+	}
+
+	public void setMlbarcodeRef1(String mlbarcodeRef1) {
+		this.mlbarcodeRef1 = mlbarcodeRef1;
 	}
 
 }

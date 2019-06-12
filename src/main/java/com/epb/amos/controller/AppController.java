@@ -30,12 +30,20 @@ import com.epb.amos.entity.EpAttach;
 import com.epb.amos.entity.MlStockDtl;
 import com.epb.amos.entity.MlStockSump;
 import com.epb.amos.entity.MldmasView;
+import com.epb.amos.entity.Mlmas;
+import com.epb.amos.entity.MlmasDespatchView;
+import com.epb.amos.entity.MlmasSuppDistinct;
 import com.epb.amos.entity.MlmasView;
+import com.epb.amos.entity.Mlvessel;
 import com.epb.amos.repository.EpAttachRepository;
 import com.epb.amos.repository.MlStockDtlRepository;
 import com.epb.amos.repository.MlStockSumpRepository;
 import com.epb.amos.repository.MldmasViewRepository;
+import com.epb.amos.repository.MlmasDespatchViewRepository;
+import com.epb.amos.repository.MlmasRepository;
+import com.epb.amos.repository.MlmasSuppDistinctRepository;
 import com.epb.amos.repository.MlmasViewRepository;
+import com.epb.amos.repository.MlvesselRepository;
 import com.epb.amos.service.ProcedureResponse;
 import com.epb.amos.service.ProcedureService;
 
@@ -87,18 +95,52 @@ public class AppController {
 	}
 
 	@GetMapping("/orders-by-despatch-id")
-	public ResponseEntity<List<MlmasView>> getOrdersByDespatchId(
+	public ResponseEntity<List<MlmasDespatchView>> getOrdersByDespatchId(
 			@RequestParam final BigDecimal despatchId) {
 
-		final MlmasView probe = new MlmasView();
+		final MlmasDespatchView probe = new MlmasDespatchView();
 		probe.setMldRecKey(despatchId);
 
-		final List<MlmasView> mlmasViews = this.mlmasViewRepository
+		final List<MlmasDespatchView> mlmasDespatchViews = this.mlmasDespatchViewRepository
 				.findAll(
 						Example.of(probe),
 						Sort.by("vslName", "custName", "stockDate", "landedItem"));
-		return ResponseEntity.ok(mlmasViews);
+		return ResponseEntity.ok(mlmasDespatchViews);
 	}
+
+	@GetMapping("/search-suppliers")
+	public ResponseEntity<List<MlmasSuppDistinct>> searchSuppliers(
+			@RequestParam final String custId) {
+		
+		final MlmasSuppDistinct probe = new MlmasSuppDistinct();
+		probe.setCustId(custId);	
+		
+		final List<MlmasSuppDistinct> mlmasSuppDistincts = this.mlmasSuppDistinctRepository
+				.findAll(
+						Example.of(probe),
+						Sort.by("suppName"));
+
+		return ResponseEntity.ok(mlmasSuppDistincts);
+	}
+	
+	@GetMapping("/search-all-suppliers")
+	public ResponseEntity<List<MlmasSuppDistinct>> searchAllSuppliers() {
+		
+		final List<MlmasSuppDistinct> mlmasSuppDistincts = this.mlmasSuppDistinctRepository
+				.findAll(Sort.by("suppName"));
+
+		return ResponseEntity.ok(mlmasSuppDistincts);
+	}
+	
+	@GetMapping("/search-vessels")
+	public ResponseEntity<List<Mlvessel>> searchVessels() {
+		
+		final List<Mlvessel> mlvessels = this.mlvesselRepository
+				.findAll(Sort.by("vslId"));
+
+		return ResponseEntity.ok(mlvessels);
+	}
+	
 
 	@GetMapping("/despatches")
 	public ResponseEntity<List<MldmasView>> getDespatches(
@@ -177,7 +219,7 @@ public class AppController {
 
 		return ResponseEntity.ok(mlStockSumps);
 	}
-	
+
 	@GetMapping("/movements")
 	public ResponseEntity<List<MlStockDtl>> getMovements(
 			@RequestParam final String stkId,
@@ -185,7 +227,7 @@ public class AppController {
 
 		final List<MlStockDtl> mlStockDtls = this.mlStockDtlRepository
 				.findByStkIdAndStoreIdOrderByRecKey(stkId, storeId);
-		
+
 		return ResponseEntity.ok(mlStockDtls);
 	}
 
@@ -228,10 +270,14 @@ public class AppController {
 	private final JdbcTemplate jdbcTemplate;
 
 	private final MlmasViewRepository mlmasViewRepository;
+	private final MlmasRepository mlmasRepository;
+	private final MlmasSuppDistinctRepository mlmasSuppDistinctRepository;
+	private final MlmasDespatchViewRepository mlmasDespatchViewRepository;
 	private final MldmasViewRepository mldmasViewRepository;
 	private final MlStockSumpRepository mlStockSumpRepository;
 	private final MlStockDtlRepository mlStockDtlRepository;
 	private final EpAttachRepository epAttachRepository;
+	private final MlvesselRepository mlvesselRepository;
 
 	private final ProcedureService procedureService;
 
@@ -248,20 +294,28 @@ public class AppController {
 			final JdbcTemplate jdbcTemplate,
 			final ProcedureService procedureService,
 			final MlmasViewRepository mlmasViewRepository,
+			final MlmasRepository mlmasRepository,
+			final MlmasSuppDistinctRepository mlmasSuppDistinctRepository,
+			final MlmasDespatchViewRepository mlmasDespatchViewRepository,
 			final MldmasViewRepository mldmasViewRepository,
 			final MlStockSumpRepository mlStockSumpRepository,
 			final MlStockDtlRepository mlStockDtlRepository,
-			final EpAttachRepository epAttachRepository) {
+			final EpAttachRepository epAttachRepository,
+			final MlvesselRepository mlvesselRepository) {
 
 		super();
 
 		this.jdbcTemplate = jdbcTemplate;
 		this.jdbcTemplate.setResultsMapCaseInsensitive(true);
 		this.mlmasViewRepository = mlmasViewRepository;
+		this.mlmasRepository = mlmasRepository;
+		this.mlmasSuppDistinctRepository = mlmasSuppDistinctRepository;
+		this.mlmasDespatchViewRepository = mlmasDespatchViewRepository;
 		this.mldmasViewRepository = mldmasViewRepository;
 		this.mlStockSumpRepository = mlStockSumpRepository;
 		this.mlStockDtlRepository = mlStockDtlRepository;
 		this.epAttachRepository = epAttachRepository;
+		this.mlvesselRepository = mlvesselRepository;
 
 		this.procedureService = procedureService;
 
