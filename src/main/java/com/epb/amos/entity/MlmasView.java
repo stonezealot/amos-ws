@@ -11,6 +11,7 @@ public class MlmasView {
 
 	@Id
 	private BigDecimal recKey;
+	private BigDecimal mlbarcodeRecKey;
 	private String orgId;
 	private String locId;
 	private String docId;
@@ -53,8 +54,10 @@ public class MlmasView {
 	private String suppName;
 	private BigDecimal mldRecKey;
 	private String mlBarcode;
-	private BigDecimal mlbarcodeRecKey;
 	private String mlbarcodeRef1;
+	private String mlbarcodeRef2;
+	private String mlbarcodeRef3;
+	private String mlbarcodeRef4;
 	private String dimension;
 
 	public MlmasView() {
@@ -411,6 +414,30 @@ public class MlmasView {
 
 	public void setMlbarcodeRef1(String mlbarcodeRef1) {
 		this.mlbarcodeRef1 = mlbarcodeRef1;
+	}
+
+	public String getMlbarcodeRef2() {
+		return mlbarcodeRef2;
+	}
+
+	public void setMlbarcodeRef2(String mlbarcodeRef2) {
+		this.mlbarcodeRef2 = mlbarcodeRef2;
+	}
+
+	public String getMlbarcodeRef3() {
+		return mlbarcodeRef3;
+	}
+
+	public void setMlbarcodeRef3(String mlbarcodeRef3) {
+		this.mlbarcodeRef3 = mlbarcodeRef3;
+	}
+
+	public String getMlbarcodeRef4() {
+		return mlbarcodeRef4;
+	}
+
+	public void setMlbarcodeRef4(String mlbarcodeRef4) {
+		this.mlbarcodeRef4 = mlbarcodeRef4;
 	}
 
 	public String getDimension() {

@@ -52,7 +52,7 @@ spring:
 spring:
   profiles: oracle
   datasource:
-    url: jdbc:oracle:thin:LSTUDIO/EPB@//192.168.0.17:1521/orcl
+    url: jdbc:oracle:thin:lstudio/epb@//127.0.0.1:1521/orcl
     username: LSTUDIO
     password: EPB
     driver-class-name: oracle.jdbc.OracleDriver

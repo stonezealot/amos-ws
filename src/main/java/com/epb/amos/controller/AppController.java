@@ -75,23 +75,36 @@ public class AppController {
 
 		final List<MlmasView> mlmasViews = this.mlmasViewRepository
 				.findAll(Sort.by("vslName", "custName", "stockDate", "landedItem"));
+
 		return ResponseEntity.ok(mlmasViews);
 	}
 
 	@GetMapping("/orders/{recKey}")
-	public ResponseEntity<MlmasViewInfo> getOrderDetails(
+	public ResponseEntity<List<MlmasView>> getOrderDetails(
 			@PathVariable final BigDecimal recKey) {
 
-		final Optional<MlmasView> mlmasView = this.mlmasViewRepository
-				.findById(recKey);
-		if (!mlmasView.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
+		MlmasView probe = new MlmasView();
+		probe.setRecKey(recKey);
 
-		final MlmasViewInfo mlmasViewInfo = new MlmasViewInfo(
-				this.getMlmasViewFromJDBC(recKey));
+		final List<MlmasView> mlmasView = this.mlmasViewRepository
+				.findAll(Example.of(probe));
 
-		return ResponseEntity.ok(mlmasViewInfo);
+		return ResponseEntity.ok(mlmasView);
+	}
+
+	@GetMapping("/orders-ml")
+	public ResponseEntity<List<MlmasView>> getOrderDetailsml(
+			@RequestParam final BigDecimal recKey,
+			@RequestParam final BigDecimal mlbarcodeRecKey) {
+
+		MlmasView probe = new MlmasView();
+		probe.setRecKey(recKey);
+		probe.setMlbarcodeRecKey(mlbarcodeRecKey);
+
+		final List<MlmasView> mlmasView = this.mlmasViewRepository
+				.findAll(Example.of(probe));
+
+		return ResponseEntity.ok(mlmasView);
 	}
 
 	@GetMapping("/orders-by-despatch-id")
@@ -111,10 +124,10 @@ public class AppController {
 	@GetMapping("/search-suppliers")
 	public ResponseEntity<List<MlmasSuppDistinct>> searchSuppliers(
 			@RequestParam final String custId) {
-		
+
 		final MlmasSuppDistinct probe = new MlmasSuppDistinct();
-		probe.setCustId(custId);	
-		
+		probe.setCustId(custId);
+
 		final List<MlmasSuppDistinct> mlmasSuppDistincts = this.mlmasSuppDistinctRepository
 				.findAll(
 						Example.of(probe),
@@ -122,25 +135,24 @@ public class AppController {
 
 		return ResponseEntity.ok(mlmasSuppDistincts);
 	}
-	
+
 	@GetMapping("/search-all-suppliers")
 	public ResponseEntity<List<MlmasSuppDistinct>> searchAllSuppliers() {
-		
+
 		final List<MlmasSuppDistinct> mlmasSuppDistincts = this.mlmasSuppDistinctRepository
 				.findAll(Sort.by("suppName"));
 
 		return ResponseEntity.ok(mlmasSuppDistincts);
 	}
-	
+
 	@GetMapping("/search-vessels")
 	public ResponseEntity<List<Mlvessel>> searchVessels() {
-		
+
 		final List<Mlvessel> mlvessels = this.mlvesselRepository
 				.findAll(Sort.by("vslId"));
 
 		return ResponseEntity.ok(mlvessels);
 	}
-	
 
 	@GetMapping("/despatches")
 	public ResponseEntity<List<MldmasView>> getDespatches(
@@ -247,10 +259,12 @@ public class AppController {
 
 	private MlmasView getMlmasViewFromJDBC(final BigDecimal recKey) {
 		// for situations where procedure (JDBC) has just updated the table
+
 		return this.jdbcTemplate.queryForObject(
 				"select * from MLMAS_VIEW where rec_key = ?",
 				new Object[] { recKey },
 				BeanPropertyRowMapper.newInstance(MlmasView.class));
+
 	}
 
 	private MldmasView getMldmasViewFromJDBC(final BigDecimal recKey) {
