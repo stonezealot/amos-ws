@@ -29,7 +29,7 @@ import com.epb.amos.service.ProcedureResponse;
 import com.epb.amos.service.ProcedureService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(allowCredentials = "true", allowedHeaders = "*")
 @RequestMapping("/api")
 public class ShellController {
 

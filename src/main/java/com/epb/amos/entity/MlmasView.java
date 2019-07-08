@@ -11,6 +11,7 @@ public class MlmasView {
 
 	@Id
 	private BigDecimal recKey;
+	private BigDecimal mlmasRecKey;
 	private BigDecimal mlbarcodeRecKey;
 	private String orgId;
 	private String locId;
@@ -70,6 +71,14 @@ public class MlmasView {
 
 	public void setRecKey(BigDecimal recKey) {
 		this.recKey = recKey;
+	}
+
+	public BigDecimal getMlmasRecKey() {
+		return mlmasRecKey;
+	}
+
+	public void setMlmasRecKey(BigDecimal mlmasRecKey) {
+		this.mlmasRecKey = mlmasRecKey;
 	}
 
 	public String getOrgId() {
