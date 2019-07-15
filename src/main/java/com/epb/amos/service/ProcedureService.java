@@ -4,10 +4,10 @@ import com.epb.amos.bean.Home;
 
 public interface ProcedureService {
 
-	Home epbLogin(
+	Home epbLogins(
 			String userId,
-			String pwd);
-	
+			String pwd,
+			String pwds);
 
 	static final String ERR_CODE_OK = "OK";
 }

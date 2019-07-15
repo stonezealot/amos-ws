@@ -12,19 +12,20 @@ public class ProcedureServicePostgres
 		implements ProcedureService {
 
 	@Override
-	public Home epbLogin(
+	public Home epbLogins(
 			final String userId,
-			final String pwd) {
-		
+			final String pwd,
+			final String pwds) {
+
 		final Home home = new Home();
-		
+
 		home.setResultId("01");
 		home.setResult("-");
 		home.setCustId("01");
 		home.setCustName("-");
 		home.setIsadmin("N");
 		home.setUserName("-");
-		
+
 		return home;
 	}
 

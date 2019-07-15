@@ -19,16 +19,18 @@ public class ProcedureServiceOracle
 		implements ProcedureService {
 
 	@Override
-	public Home epbLogin(
+	public Home epbLogins(
 			final String userId,
-			final String pwd) {
+			final String pwd,
+			final String pwds) {
 
 		final SqlParameterSource in = new MapSqlParameterSource()
 				.addValue("v_user_id", userId)
-				.addValue("v_pwd", pwd);
+				.addValue("v_pwd", pwd)
+				.addValue("v_pwds", pwds);
 
-		final Map<String, Object> out = this.epbLoginCall.execute(in);
-		
+		final Map<String, Object> out = this.epbLoginsCall.execute(in);
+
 		if (!"1".equals((String) out.get("v_result_id"))) {
 			throw new RuntimeException((String) out.get("v_result"));
 		}
@@ -51,7 +53,7 @@ public class ProcedureServiceOracle
 
 	private final JdbcTemplate jdbcTemplate;
 
-	private final SimpleJdbcCall epbLoginCall;
+	private final SimpleJdbcCall epbLoginsCall;
 
 	//
 	// constructor
@@ -63,9 +65,9 @@ public class ProcedureServiceOracle
 		this.jdbcTemplate = jdbcTemplate;
 		this.jdbcTemplate.setResultsMapCaseInsensitive(true);
 
-		this.epbLoginCall = new SimpleJdbcCall(this.jdbcTemplate)
-				.withProcedureName("epb_login");
-		
+		this.epbLoginsCall = new SimpleJdbcCall(this.jdbcTemplate)
+				.withProcedureName("epb_logins");
+
 	}
 
 }
