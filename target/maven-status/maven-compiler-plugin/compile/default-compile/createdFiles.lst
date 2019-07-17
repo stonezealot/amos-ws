@@ -9,6 +9,7 @@ com\epb\amos\repository\MlmasSuppDistinctRepository.class
 com\epb\amos\service\ProcedureServicePostgres.class
 com\epb\amos\entity\MlStockDtl.class
 com\epb\amos\entity\MlmasDespatchView.class
+com\epb\amos\bean\EpbLoginsPayload.class
 com\epb\amos\AmosWsApplication.class
 com\epb\amos\repository\MlvesselRepository.class
 com\epb\amos\repository\EpUserRepository.class
@@ -19,7 +20,6 @@ com\epb\amos\service\ProcedureService.class
 com\epb\amos\SecurityConfigSecurityOff.class
 com\epb\amos\repository\MlmasDespatchViewRepository.class
 com\epb\amos\SecurityConfigAuthorizationServer.class
-com\epb\amos\bean\EpbLoginPayload.class
 com\epb\amos\entity\Mlmas.class
 com\epb\amos\repository\MlStockSumpRepository.class
 com\epb\amos\entity\MlmasSuppDistinct.class
