@@ -35,7 +35,6 @@ import com.epb.amos.repository.MlStockDtlRepository;
 import com.epb.amos.repository.MlStockSumpRepository;
 import com.epb.amos.repository.MldmasViewRepository;
 import com.epb.amos.repository.MlmasDespatchViewRepository;
-import com.epb.amos.repository.MlmasRepository;
 import com.epb.amos.repository.MlmasSuppDistinctRepository;
 import com.epb.amos.repository.MlmasViewRepository;
 import com.epb.amos.repository.MlvesselRepository;
@@ -309,7 +308,6 @@ public class AppController {
 			final JdbcTemplate jdbcTemplate,
 			final ProcedureService procedureService,
 			final MlmasViewRepository mlmasViewRepository,
-			final MlmasRepository mlmasRepository,
 			final MlmasSuppDistinctRepository mlmasSuppDistinctRepository,
 			final MlmasDespatchViewRepository mlmasDespatchViewRepository,
 			final MldmasViewRepository mldmasViewRepository,

@@ -1,7 +1,6 @@
 package com.epb.amos.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
