@@ -12,6 +12,8 @@ public class Mlvessel {
 	private BigDecimal recKey;
 	private String vslId;
 	private String name;
+	private String mlownerId;
+	private String statusFlg;
 
 	public Mlvessel() {
 		super();
@@ -39,6 +41,22 @@ public class Mlvessel {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getMlownerId() {
+		return mlownerId;
+	}
+
+	public void setMlownerId(String mlownerId) {
+		this.mlownerId = mlownerId;
+	}
+
+	public String getStatusFlg() {
+		return statusFlg;
+	}
+
+	public void setStatusFlg(String statusFlg) {
+		this.statusFlg = statusFlg;
 	}
 
 }

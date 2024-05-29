@@ -39,6 +39,8 @@ public class MldmasView {
 	private String consFax;
 	private String consEmailAddr;
 	private String consStateId;
+	private String vslId;
+	private String docId;
 
 	public MldmasView() {
 		super();
@@ -274,6 +276,22 @@ public class MldmasView {
 
 	public void setConsStateId(String consStateId) {
 		this.consStateId = consStateId;
+	}
+
+	public String getVslId() {
+		return vslId;
+	}
+
+	public void setVslId(String vslId) {
+		this.vslId = vslId;
+	}
+
+	public String getDocId() {
+		return docId;
+	}
+
+	public void setDocId(String docId) {
+		this.docId = docId;
 	}
 
 }

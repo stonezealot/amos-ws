@@ -7,9 +7,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.epb.amos.bean.EpbLoginsPayload;
@@ -29,6 +31,24 @@ public class ShellController {
 
 		final String userId = payload.getUserId();
 		final String pwd = payload.getPwd();
+		final String pwds = this.toUserPwd(pwd);
+
+		this.log.info("userId = " + userId);
+		this.log.info("pwd = " + pwd);
+		this.log.info("pwds = " + pwds);
+
+		return ResponseEntity.ok(
+				this.procedureService
+						.epbLogins(userId, pwd, pwds));
+	}
+
+	@GetMapping("/login")
+	public ResponseEntity<Home> getLogin(
+			@RequestParam final String userId,
+			@RequestParam final String pwd) {
+
+		this.log.error("in");
+
 		final String pwds = this.toUserPwd(pwd);
 
 		this.log.info("userId = " + userId);
